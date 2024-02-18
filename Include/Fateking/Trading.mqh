@@ -24,7 +24,8 @@ public:
    void              ModifyPending(string symbo, ENUM_ORDER_TYPE type, double pendingPrice, double limitPrice, double sl, double tp, int magic);
    int               OrderCount(string symbol, ENUM_POSITION_TYPE type, int magic);
    int               OrderCount(string symbol, int magic);
-   long              RecentOrder(string symbol, ENUM_POSITION_TYPE type, double &openprice, datetime &opentime, double &openlots, double &opensl, double &opentp, int magic);
+   double            FloorLots(string symbol, double lots);
+   long              LatestOrder(string symbol, ENUM_POSITION_TYPE type, double &openprice, datetime &opentime, double &openlots, double &opensl, double &opentp, int magic);
 };
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -263,7 +264,20 @@ int Trading::OrderCount(string symbol, int magic = 0) {
    return (count);
 }
 //+------------------------------------------------------------------+
-long Trading::RecentOrder(string symbol,ENUM_POSITION_TYPE type,double &openprice,datetime &opentime,double &openlots,double &opensl,double &opentp,int magic) {
+double Trading::FloorLots(string symbol, double lots) {
+   double floorLots = 0;
+   double minLots = SymbolInfoDouble(symbol,SYMBOL_VOLUME_MIN);
+   double stepLots = SymbolInfoDouble(symbol,SYMBOL_VOLUME_STEP);
+   if(lots < minLots) return(0);
+   else {
+      double floorMinLots = MathFloor(lots/minLots) * minLots;
+      floorLots = floorMinLots + MathFloor((lots - floorMinLots) / stepLots) * stepLots;
+   }
+   return(floorLots);
+}
+//+------------------------------------------------------------------+
+long Trading::LatestOrder(string symbol, ENUM_POSITION_TYPE type, double &openprice, datetime &opentime,
+                          double &openlots, double &opensl, double &opentp, int magic) {
    openprice = 0;
    opentime = 0;
    openlots = 0;
