@@ -190,7 +190,7 @@ ulong Trading::Sell(string symbol, double lots, int slpoint, int tppoint, string
 void Trading::CloseAllBuy(string symbol, int magic) {
    int total = PositionsTotal();
    for(int i = total - 1; i >= 0; i--) {
-      if(PositionGetTicket(i) > 0) {                                     //选中订单
+      if(PositionGetTicket(i) > 0) {                                 //选中订单
          if(PositionGetString(POSITION_SYMBOL) == symbol && PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY) {
             if(magic == 0) {
                MqlTradeRequest req= {};
@@ -200,10 +200,10 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                req.volume   = PositionGetDouble(POSITION_VOLUME);    // 0.1手交易量
                req.type     = ORDER_TYPE_SELL;                       // 订单类型
                req.price    = SymbolInfoDouble(symbol,SYMBOL_BID);   // 持仓价格
-               req.deviation= 100; // 允许价格偏差
+               req.deviation= 100;                                   // 允许价格偏差
                req.position = PositionGetTicket(i);
                if(!OrderSend(req, res))
-                  PrintFormat("OrderSend error %d",GetLastError());      // 如果不能发送请求，输出错误
+                  PrintFormat("OrderSend error %d",GetLastError());  // 如果不能发送请求，输出错误
             } else {
                if(PositionGetInteger(POSITION_MAGIC) == magic) {
                   MqlTradeRequest req= {};
@@ -219,7 +219,6 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                      PrintFormat("OrderSend error %d",GetLastError());    // 如果不能发送请求，输出错误
                }
             }
-
          }
       }
    }
