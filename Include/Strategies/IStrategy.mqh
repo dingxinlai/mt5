@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                                         Grid.mqh |
+//|                                                    IStrategy.mqh |
 //|                                                       Dylan Ding |
 //|                                         https://www.fateking.com |
 //+------------------------------------------------------------------+
@@ -7,11 +7,8 @@
 #property link      "https://www.fateking.com"
 #property version   "1.00"
 
-class Grid {
-private:
-public:
-                     Grid();
-                    ~Grid();
-    void             correct();
+interface IStategy {
 
-}
+   void OnTick();
+
+}  

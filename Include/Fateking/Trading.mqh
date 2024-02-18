@@ -12,16 +12,18 @@ private:
 public:
                      Trading();
                     ~Trading();
-   ulong             buy(string symbol, double lots, int slpoint, int tppoint, string comment, int magic);
-   ulong             buyPending(string symbol, double lots, double pendingPrice, int slpoint, int tppoint, string comment, int magic);
-   ulong             buyStopLimit(string symbol, double lots, double stopPrice, double limitPrice, int slpoint, int tppoint, string comment, int magic);
-   ulong             sell(string symbol, double lots, int slpoint, int tppoint, string comment, int magic);
-   void              closeAllBuy(string symbol, int magic);
-   void              closeAllSell(string symbol, int magic);
-   void              closeAll(string symbol, int magic);
-   void              modifysltp(string symbol, ENUM_POSITION_TYPE type, double sl, double tp, int magic);
-   void              delOrders(string symbol, int magic);
-   void              modifyPending(string symbo, ENUM_ORDER_TYPE type, double pendingPrice, double limitPrice, double sl, double tp, int magic);
+   ulong             Buy(string symbol, double lots, int slpoint, int tppoint, string comment, int magic);
+   ulong             BuyPending(string symbol, double lots, double pendingPrice, int slpoint, int tppoint, string comment, int magic);
+   ulong             BuyStopLimit(string symbol, double lots, double stopPrice, double limitPrice, int slpoint, int tppoint, string comment, int magic);
+   ulong             Sell(string symbol, double lots, int slpoint, int tppoint, string comment, int magic);
+   void              CloseAllBuy(string symbol, int magic);
+   void              CloseAllSell(string symbol, int magic);
+   void              CloseAll(string symbol, int magic);
+   void              Modifysltp(string symbol, ENUM_POSITION_TYPE type, double sl, double tp, int magic);
+   void              DelOrders(string symbol, int magic);
+   void              ModifyPending(string symbo, ENUM_ORDER_TYPE type, double pendingPrice, double limitPrice, double sl, double tp, int magic);
+   int               OrderCount(string symbol, ENUM_POSITION_TYPE type, int magic);
+   int               OrderCount(string symbol, int magic);
 };
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -36,7 +38,7 @@ Trading::~Trading() {
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-ulong Trading::buy(string symbol, double lots, int slpoint, int tppoint, string comment, int magic) {
+ulong Trading::Buy(string symbol, double lots, int slpoint, int tppoint, string comment, int magic) {
    ulong order = 0;
    int total = PositionsTotal();
    for (int i = total - 1; i >= 0; i--) {
@@ -72,7 +74,7 @@ ulong Trading::buy(string symbol, double lots, int slpoint, int tppoint, string 
    return (order);
 }
 //+------------------------------------------------------------------+
-ulong Trading::buyPending(string symbol, double lots, double pendingPrice, int slpoint, int tppoint, string comment, int magic) {
+ulong Trading::BuyPending(string symbol, double lots, double pendingPrice, int slpoint, int tppoint, string comment, int magic) {
    ulong order = 0;
    int total = OrdersTotal();
    for(int i = total - 1; i >= 0; i--) {
@@ -113,7 +115,7 @@ ulong Trading::buyPending(string symbol, double lots, double pendingPrice, int s
    return (order);
 }
 //+------------------------------------------------------------------+
-ulong Trading::buyStopLimit(string symbol, double lots, double stopPrice, double limitPrice, int slpoint, int tppoint, string comment, int magic) {
+ulong Trading::BuyStopLimit(string symbol, double lots, double stopPrice, double limitPrice, int slpoint, int tppoint, string comment, int magic) {
    ulong order = 0;
    int total = OrdersTotal();
    for(int i = total - 1; i >= 0; i--) {
@@ -159,7 +161,7 @@ ulong Trading::buyStopLimit(string symbol, double lots, double stopPrice, double
    return(order);
 }
 //+------------------------------------------------------------------+
-ulong Trading::sell(string symbol, double lots, int slpoint, int tppoint, string comment, int magic) {
+ulong Trading::Sell(string symbol, double lots, int slpoint, int tppoint, string comment, int magic) {
    MqlTradeRequest req = {};
    MqlTradeResult res = {};
    req.action = TRADE_ACTION_DEAL;
@@ -183,12 +185,12 @@ ulong Trading::sell(string symbol, double lots, int slpoint, int tppoint, string
    return (res.order);
 }
 //+------------------------------------------------------------------+
-void Trading::closeAllBuy(string symbol, int magic) {
+void Trading::CloseAllBuy(string symbol, int magic) {
    int total = PositionsTotal();
    for(int i = total - 1; i >= 0; i--) {
       if(PositionGetTicket(i) > 0) {                                     //选中订单
          if(PositionGetString(POSITION_SYMBOL) == symbol && PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY) {
-            if(magic==0) {
+            if(magic == 0) {
                MqlTradeRequest req= {};
                MqlTradeResult  res= {};
                req.action   = TRADE_ACTION_DEAL;                     // 交易操作类型
@@ -220,4 +222,44 @@ void Trading::closeAllBuy(string symbol, int magic) {
       }
    }
 }
+//+------------------------------------------------------------------+
+int Trading::OrderCount(string symbol, ENUM_POSITION_TYPE type, int magic = 0) {
+   int count = 0;
+   int total = PositionsTotal();
+   for (int i = total - 1; i >= 0; i--) {
+      if (PositionGetTicket(i) > 0) {
+         if (PositionGetString(POSITION_SYMBOL) == symbol
+               && PositionGetInteger(POSITION_TYPE) == type) {
+            if (magic == 0) {
+               count++;
+            } else {
+               if (PositionGetInteger(POSITION_MAGIC) == magic) {
+                  count++;
+               }
+            }
+         }
+      }
+   }
+   return (count);
+}
+//+------------------------------------------------------------------+
+int Trading::OrderCount(string symbol, int magic = 0) {
+   int count = 0;
+   int total = PositionsTotal();
+   for (int i = total - 1; i >= 0; i--) {
+      if (PositionGetTicket(i) > 0) {
+         if (PositionGetString(POSITION_SYMBOL) == symbol) {
+            if (magic == 0) {
+               count++;
+            } else {
+               if (PositionGetInteger(POSITION_MAGIC) == magic) {
+                  count++;
+               }
+            }
+         }
+      }
+   }
+   return (count);
+}
+//+------------------------------------------------------------------+
 //+------------------------------------------------------------------+
