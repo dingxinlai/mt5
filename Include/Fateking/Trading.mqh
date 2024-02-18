@@ -225,6 +225,82 @@ void Trading::CloseAllBuy(string symbol, int magic) {
    }
 }
 //+------------------------------------------------------------------+
+void Trading::Modifysltp(string symbol, ENUM_POSITION_TYPE type, double sl, double tp, int magic = 0) {
+   int t = PositionsTotal();
+   for(int i = t-1; i >= 0; i--) {
+      if(PositionGetTicket(i) > 0) {
+         if(PositionGetString(POSITION_SYMBOL) == symbol) {
+            if(type == POSITION_TYPE_BUY) {
+               if(magic == 0) {
+                  MqlTradeRequest request = {};
+                  MqlTradeResult  result = {};
+                  request.action=TRADE_ACTION_SLTP;
+                  request.position=PositionGetTicket(i);
+                  request.symbol=symbol;
+                  if(sl != 0) {
+                     request.sl=NormalizeDouble(sl,Digits());
+                  }
+                  if(tp != 0) {
+                     request.tp=NormalizeDouble(tp,Digits());
+                  }
+                  if(!OrderSend(request,result))
+                     PrintFormat("OrderSend error %d",GetLastError());
+               } else {
+                  if(PositionGetInteger(POSITION_MAGIC)==magic) {
+                     MqlTradeRequest request= {};
+                     MqlTradeResult  result= {};
+                     request.action=TRADE_ACTION_SLTP;
+                     request.position=PositionGetTicket(i);
+                     request.symbol=symbol;
+                     if(sl != 0) {
+                        request.sl=NormalizeDouble(sl,Digits());
+                     }
+                     if(tp != 0) {
+                        request.tp=NormalizeDouble(tp,Digits());
+                     }
+                     if(!OrderSend(request,result))
+                        PrintFormat("OrderSend error %d",GetLastError());
+                  }
+               }
+            }
+            if(type == POSITION_TYPE_SELL) {
+               if(magic == 0) {
+                  MqlTradeRequest request= {};
+                  MqlTradeResult  result= {};
+                  request.action=TRADE_ACTION_SLTP;
+                  request.position=PositionGetTicket(i);
+                  request.symbol=symbol;
+                  if(sl != 0) {
+                     request.sl = NormalizeDouble(sl,Digits());
+                  }
+                  if(tp != 0) {
+                     request.tp = NormalizeDouble(tp,Digits());
+                  }
+                  if(!OrderSend(request,result))
+                     PrintFormat("OrderSend error %d",GetLastError());
+               } else {
+                  if(PositionGetInteger(POSITION_MAGIC) == magic) {
+                     MqlTradeRequest request= {};
+                     MqlTradeResult  result= {};
+                     request.action=TRADE_ACTION_SLTP;
+                     request.position=PositionGetTicket(i);
+                     request.symbol=symbol;
+                     if(sl != 0) {
+                        request.sl = NormalizeDouble(sl,Digits());
+                     }
+                     if(tp != 0) {
+                        request.tp = NormalizeDouble(tp,Digits());
+                     }
+                     if(!OrderSend(request,result))
+                        PrintFormat("OrderSend error %d",GetLastError());
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+//+------------------------------------------------------------------+
 int Trading::OrderCount(string symbol, ENUM_POSITION_TYPE type, int magic = 0) {
    int count = 0;
    int total = PositionsTotal();
