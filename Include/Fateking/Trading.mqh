@@ -161,10 +161,10 @@ ulong Trading::BuyStopLimit(string symbol, double lots, double stopPrice, double
    req.price = stopPrice;
    req.stoplimit = limitPrice;
    if (slpoint != 0) {
-      req.sl = limitPrice - ((double) slpoint) * Point();
+      req.sl = limitPrice - ((double) slpoint) / 100 * Point();
    }
    if (tppoint != 0) {
-      req.tp = limitPrice + ((double) tppoint) * Point();
+      req.tp = limitPrice + ((double) tppoint) / 100 * Point();
    }
    req.comment = comment;
    req.magic = magic;
@@ -189,10 +189,10 @@ ulong Trading::Sell(string symbol, double lots, int slpoint, int tppoint, string
    double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
    req.price = bid;
    if (slpoint != 0) {
-      req.sl = bid + ((double) slpoint) * Point();
+      req.sl = bid + ((double) slpoint) / 100 * Point();
    }
    if (tppoint != 0) {
-      req.tp = bid - ((double) tppoint) * Point();
+      req.tp = bid - ((double) tppoint) / 100 * Point();
    }
    req.comment = comment;
    req.magic = magic;
@@ -217,11 +217,11 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                req.symbol   = symbol;                                // 交易品种
                req.volume   = PositionGetDouble(POSITION_VOLUME);    // 0.1手交易量
                req.type     = ORDER_TYPE_SELL;                       // 订单类型
-               req.price    = SymbolInfoDouble(symbol,SYMBOL_BID);   // 持仓价格
+               req.price    = SymbolInfoDouble(symbol, SYMBOL_BID);   // 持仓价格
                req.deviation= deviation;                             // 允许价格偏差
                req.position = PositionGetTicket(i);
                if(!OrderSend(req, res))
-                  PrintFormat("OrderSend error %d",GetLastError());  // 如果不能发送请求，输出错误
+                  PrintFormat("OrderSend error %d", GetLastError());  // 如果不能发送请求，输出错误
             } else {
                if(PositionGetInteger(POSITION_MAGIC) == magic) {
                   MqlTradeRequest req= {};
