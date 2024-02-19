@@ -9,6 +9,7 @@
 
 class Trading {
 private:
+   ulong             deviation;
 public:
                      Trading();
                     ~Trading();
@@ -31,6 +32,7 @@ public:
 //|                                                                  |
 //+------------------------------------------------------------------+
 Trading::Trading() {
+   deviation = 2;
 }
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -58,12 +60,16 @@ ulong Trading::Buy(string symbol, double lots, int slpoint, int tppoint, string 
    req.symbol = symbol;
    req.type = ORDER_TYPE_BUY;
    req.volume = lots;
-   req.deviation = 100;
+   req.deviation = deviation;
 
    double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
    req.price = ask;
-   req.sl = ask - slpoint * Point();
-   req.tp = ask + tppoint * Point();
+   if (slpoint != 0) {
+      req.sl = ask - ((double) slpoint) / 100 * Point();
+   }
+   if (tppoint != 0) {
+      req.tp = ask + ((double) tppoint) / 100 * Point();
+   }
    req.comment = comment;
    req.magic = magic;
 
@@ -102,10 +108,14 @@ ulong Trading::BuyPending(string symbol, double lots, double pendingPrice, int s
       req.type = ORDER_TYPE_BUY_LIMIT;
    }
    req.volume = lots;
-   req.deviation = 100;
+   req.deviation = deviation;
    req.price = pendingPrice;
-   req.sl = pendingPrice-slpoint*Point();
-   req.tp = pendingPrice+tppoint*Point();
+   if (slpoint != 0) {
+      req.sl = pendingPrice - ((double) slpoint) / 100 * Point();
+   }
+   if (tppoint != 0) {
+      req.tp = pendingPrice + ((double) tppoint) / 100 * Point();
+   }
    req.comment = comment;
    req.magic = magic;
 //--- 发送请求
@@ -121,7 +131,7 @@ ulong Trading::BuyStopLimit(string symbol, double lots, double stopPrice, double
    ulong order = 0;
    int total = OrdersTotal();
    for(int i = total - 1; i >= 0; i--) {
-      if(OrderGetTicket(i)>0) {
+      if(OrderGetTicket(i) > 0) {
          if(OrderGetString(ORDER_SYMBOL) == symbol
                && (OrderGetInteger(ORDER_TYPE) == ORDER_TYPE_BUY_STOP_LIMIT)
                && OrderGetInteger(ORDER_MAGIC) == magic) {
@@ -137,26 +147,30 @@ ulong Trading::BuyStopLimit(string symbol, double lots, double stopPrice, double
    req.action = TRADE_ACTION_PENDING;
    req.type = ORDER_TYPE_BUY_STOP_LIMIT;
    req.symbol = symbol;
-   double askp = SymbolInfoDouble(symbol,SYMBOL_ASK);
+   double askp = SymbolInfoDouble(symbol, SYMBOL_ASK);
    if(stopPrice <= askp) {
-      Alert("stop  price必须大于市价");
+      printf("stop  price必须大于市价");
       return(0);
    }
    if(limitPrice >= stopPrice) {
-      Alert("limit price必须大于stop price");
+      printf("limit price必须大于stop price");
       return(0);
    }
    req.volume = lots;
-   req.deviation = 100;
+   req.deviation = deviation;
    req.price = stopPrice;
    req.stoplimit = limitPrice;
-   req.sl = limitPrice-slpoint*Point();
-   req.tp = limitPrice+tppoint*Point();
+   if (slpoint != 0) {
+      req.sl = limitPrice - ((double) slpoint) * Point();
+   }
+   if (tppoint != 0) {
+      req.tp = limitPrice + ((double) tppoint) * Point();
+   }
    req.comment = comment;
    req.magic = magic;
 //--- 发送请求
    if(!OrderSend(req, res)) {
-      PrintFormat("OrderSend error %d",GetLastError());     // 如果不能发送请求，输出错误代码
+      PrintFormat("OrderSend error %d", GetLastError());     // 如果不能发送请求，输出错误代码
       return (0);
    }
    order = res.order;
@@ -170,12 +184,16 @@ ulong Trading::Sell(string symbol, double lots, int slpoint, int tppoint, string
    req.symbol = symbol;
    req.type = ORDER_TYPE_SELL;
    req.volume = lots;
-   req.deviation = 100;
+   req.deviation = deviation;
 
    double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
    req.price = bid;
-   req.sl = bid + slpoint * Point();
-   req.tp = bid - tppoint * Point();
+   if (slpoint != 0) {
+      req.sl = bid + ((double) slpoint) * Point();
+   }
+   if (tppoint != 0) {
+      req.tp = bid - ((double) tppoint) * Point();
+   }
    req.comment = comment;
    req.magic = magic;
 
@@ -200,7 +218,7 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                req.volume   = PositionGetDouble(POSITION_VOLUME);    // 0.1手交易量
                req.type     = ORDER_TYPE_SELL;                       // 订单类型
                req.price    = SymbolInfoDouble(symbol,SYMBOL_BID);   // 持仓价格
-               req.deviation= 100;                                   // 允许价格偏差
+               req.deviation= deviation;                             // 允许价格偏差
                req.position = PositionGetTicket(i);
                if(!OrderSend(req, res))
                   PrintFormat("OrderSend error %d",GetLastError());  // 如果不能发送请求，输出错误
@@ -213,7 +231,7 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                   req.volume   = PositionGetDouble(POSITION_VOLUME);  // 0.1手交易量
                   req.type     = ORDER_TYPE_SELL;                     // 订单类型
                   req.price    = SymbolInfoDouble(symbol,SYMBOL_BID); // 持仓价格
-                  req.deviation= 100;                                 // 允许价格偏差
+                  req.deviation= deviation;                           // 允许价格偏差
                   req.position = PositionGetTicket(i);
                   if(!OrderSend(req, res))
                      PrintFormat("OrderSend error %d",GetLastError());    // 如果不能发送请求，输出错误
@@ -341,8 +359,8 @@ int Trading::OrderCount(string symbol, int magic = 0) {
 //+------------------------------------------------------------------+
 double Trading::FloorLots(string symbol, double lots) {
    double floorLots = 0;
-   double minLots = SymbolInfoDouble(symbol,SYMBOL_VOLUME_MIN);
-   double stepLots = SymbolInfoDouble(symbol,SYMBOL_VOLUME_STEP);
+   double minLots = SymbolInfoDouble(symbol, SYMBOL_VOLUME_MIN);
+   double stepLots = SymbolInfoDouble(symbol, SYMBOL_VOLUME_STEP);
    if(lots < minLots) return(0);
    else {
       double floorMinLots = MathFloor(lots/minLots) * minLots;
