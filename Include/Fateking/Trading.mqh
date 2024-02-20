@@ -214,8 +214,8 @@ void Trading::CloseAllBuy(string symbol, int magic) {
       if(PositionGetTicket(i) > 0) {                                  //选中订单
          if(PositionGetString(POSITION_SYMBOL) == symbol && PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY) {
             if(magic == 0) {
-               MqlTradeRequest req= {};
-               MqlTradeResult  res= {};
+               MqlTradeRequest req = {};
+               MqlTradeResult  res = {};
                req.action   = TRADE_ACTION_DEAL;                      // 交易操作类型
                req.symbol   = symbol;                                 // 交易品种
                req.volume   = PositionGetDouble(POSITION_VOLUME);     // 0.1手交易量
@@ -223,6 +223,7 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                req.price    = SymbolInfoDouble(symbol, SYMBOL_BID);   // 持仓价格
                req.deviation= deviation;                              // 允许价格偏差
                req.position = PositionGetTicket(i);
+               req.comment  = "平:" + DoubleToString(req.price);
                if(!OrderSend(req, res))
                   PrintFormat("OrderSend error %d", GetLastError());  // 如果不能发送请求，输出错误
             } else {
@@ -236,6 +237,7 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                   req.price    = SymbolInfoDouble(symbol, SYMBOL_BID); // 持仓价格
                   req.deviation= deviation;                           // 允许价格偏差
                   req.position = PositionGetTicket(i);
+                  req.comment  = "平:" + DoubleToString(req.price);
                   if(!OrderSend(req, res))
                      PrintFormat("OrderSend error %d",GetLastError());    // 如果不能发送请求，输出错误
                }
@@ -251,29 +253,31 @@ void Trading::CloseAllSell(string symbol,int magic = 0) {
       if(PositionGetTicket(i)>0) {
          if(PositionGetString(POSITION_SYMBOL)==symbol && PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL) {
             if(magic==0) {
-               MqlTradeRequest request = {};
-               MqlTradeResult  result = {};
-               request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
-               request.symbol   =symbol;                              // 交易品种
-               request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
-               request.type     =ORDER_TYPE_BUY;                        // 订单类型
-               request.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
-               request.deviation=100; // 允许价格偏差
-               request.position =PositionGetTicket(i);
-               if(!OrderSend(request,result))
+               MqlTradeRequest req = {};
+               MqlTradeResult  res = {};
+               req.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+               req.symbol   =symbol;                              // 交易品种
+               req.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+               req.type     =ORDER_TYPE_BUY;                        // 订单类型
+               req.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
+               req.deviation=100; // 允许价格偏差
+               req.position =PositionGetTicket(i);
+               req.comment  = "平:" + DoubleToString(req.price);
+               if(!OrderSend(req, res))
                   PrintFormat("OrderSend error %d",GetLastError());   // 如果不能发送请求，输出错误
             } else {
                if(PositionGetInteger(POSITION_MAGIC) == magic) {
-                  MqlTradeRequest request= {};
-                  MqlTradeResult  result= {};
-                  request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
-                  request.symbol   =symbol;                              // 交易品种
-                  request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
-                  request.type     =ORDER_TYPE_BUY;                        // 订单类型
-                  request.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
-                  request.deviation=100; // 允许价格偏差
-                  request.position =PositionGetTicket(i);
-                  if(!OrderSend(request,result))
+                  MqlTradeRequest req= {};
+                  MqlTradeResult  res= {};
+                  req.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+                  req.symbol   =symbol;                              // 交易品种
+                  req.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+                  req.type     =ORDER_TYPE_BUY;                        // 订单类型
+                  req.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
+                  req.deviation=100; // 允许价格偏差
+                  req.position =PositionGetTicket(i);
+                  req.comment  = "平:" + DoubleToString(req.price);
+                  if(!OrderSend(req, res))
                      PrintFormat("OrderSend error %d",GetLastError());
                }
             }
