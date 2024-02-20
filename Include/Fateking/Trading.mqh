@@ -32,7 +32,7 @@ public:
 //|                                                                  |
 //+------------------------------------------------------------------+
 Trading::Trading() {
-   deviation = 2;
+   deviation = 100;
 }
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -118,6 +118,7 @@ ulong Trading::BuyPending(string symbol, double lots, double pendingPrice, int s
    }
    req.comment = comment;
    req.magic = magic;
+
 //--- 发送请求
    if(!OrderSend(req, res)) {
       PrintFormat("OrderSend error %d",GetLastError());     // 如果不能发送请求，输出错误代码
@@ -147,6 +148,7 @@ ulong Trading::BuyStopLimit(string symbol, double lots, double stopPrice, double
    req.action = TRADE_ACTION_PENDING;
    req.type = ORDER_TYPE_BUY_STOP_LIMIT;
    req.symbol = symbol;
+
    double askp = SymbolInfoDouble(symbol, SYMBOL_ASK);
    if(stopPrice <= askp) {
       printf("stop  price必须大于市价");
@@ -168,6 +170,7 @@ ulong Trading::BuyStopLimit(string symbol, double lots, double stopPrice, double
    }
    req.comment = comment;
    req.magic = magic;
+
 //--- 发送请求
    if(!OrderSend(req, res)) {
       PrintFormat("OrderSend error %d", GetLastError());     // 如果不能发送请求，输出错误代码
@@ -208,17 +211,17 @@ ulong Trading::Sell(string symbol, double lots, int slpoint, int tppoint, string
 void Trading::CloseAllBuy(string symbol, int magic) {
    int total = PositionsTotal();
    for(int i = total - 1; i >= 0; i--) {
-      if(PositionGetTicket(i) > 0) {                                 //选中订单
+      if(PositionGetTicket(i) > 0) {                                  //选中订单
          if(PositionGetString(POSITION_SYMBOL) == symbol && PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY) {
             if(magic == 0) {
                MqlTradeRequest req= {};
                MqlTradeResult  res= {};
-               req.action   = TRADE_ACTION_DEAL;                     // 交易操作类型
-               req.symbol   = symbol;                                // 交易品种
-               req.volume   = PositionGetDouble(POSITION_VOLUME);    // 0.1手交易量
-               req.type     = ORDER_TYPE_SELL;                       // 订单类型
+               req.action   = TRADE_ACTION_DEAL;                      // 交易操作类型
+               req.symbol   = symbol;                                 // 交易品种
+               req.volume   = PositionGetDouble(POSITION_VOLUME);     // 0.1手交易量
+               req.type     = ORDER_TYPE_SELL;                        // 订单类型
                req.price    = SymbolInfoDouble(symbol, SYMBOL_BID);   // 持仓价格
-               req.deviation= deviation;                             // 允许价格偏差
+               req.deviation= deviation;                              // 允许价格偏差
                req.position = PositionGetTicket(i);
                if(!OrderSend(req, res))
                   PrintFormat("OrderSend error %d", GetLastError());  // 如果不能发送请求，输出错误
@@ -230,11 +233,48 @@ void Trading::CloseAllBuy(string symbol, int magic) {
                   req.symbol   = symbol;                              // 交易品种
                   req.volume   = PositionGetDouble(POSITION_VOLUME);  // 0.1手交易量
                   req.type     = ORDER_TYPE_SELL;                     // 订单类型
-                  req.price    = SymbolInfoDouble(symbol,SYMBOL_BID); // 持仓价格
+                  req.price    = SymbolInfoDouble(symbol, SYMBOL_BID); // 持仓价格
                   req.deviation= deviation;                           // 允许价格偏差
                   req.position = PositionGetTicket(i);
                   if(!OrderSend(req, res))
                      PrintFormat("OrderSend error %d",GetLastError());    // 如果不能发送请求，输出错误
+               }
+            }
+         }
+      }
+   }
+}
+//+------------------------------------------------------------------+
+void Trading::CloseAllSell(string symbol,int magic = 0) {
+   int t = PositionsTotal();
+   for(int i=t-1; i>=0; i--) {
+      if(PositionGetTicket(i)>0) {
+         if(PositionGetString(POSITION_SYMBOL)==symbol && PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL) {
+            if(magic==0) {
+               MqlTradeRequest request = {};
+               MqlTradeResult  result = {};
+               request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+               request.symbol   =symbol;                              // 交易品种
+               request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+               request.type     =ORDER_TYPE_BUY;                        // 订单类型
+               request.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
+               request.deviation=100; // 允许价格偏差
+               request.position =PositionGetTicket(i);
+               if(!OrderSend(request,result))
+                  PrintFormat("OrderSend error %d",GetLastError());   // 如果不能发送请求，输出错误
+            } else {
+               if(PositionGetInteger(POSITION_MAGIC) == magic) {
+                  MqlTradeRequest request= {};
+                  MqlTradeResult  result= {};
+                  request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+                  request.symbol   =symbol;                              // 交易品种
+                  request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+                  request.type     =ORDER_TYPE_BUY;                        // 订单类型
+                  request.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
+                  request.deviation=100; // 允许价格偏差
+                  request.position =PositionGetTicket(i);
+                  if(!OrderSend(request,result))
+                     PrintFormat("OrderSend error %d",GetLastError());
                }
             }
          }
@@ -378,26 +418,26 @@ long Trading::LatestOrder(string symbol, ENUM_POSITION_TYPE type, double &openpr
    opentp = 0;
    long ticket = 0;
    int t = PositionsTotal();
-   for(int i=t-1; i>=0; i--) {
+   for(int i = t - 1; i >= 0; i--) {
       if(PositionGetTicket(i)>0) {
          if(PositionGetString(POSITION_SYMBOL) == symbol
                && PositionGetInteger(POSITION_TYPE) == type) {
             if(magic == 0) {
-               openprice=PositionGetDouble(POSITION_PRICE_OPEN);
-               opentime=PositionGetInteger(POSITION_TIME);
-               openlots=PositionGetDouble(POSITION_VOLUME);
-               opensl=PositionGetDouble(POSITION_SL);
-               opentp=PositionGetDouble(POSITION_TP);
-               ticket=PositionGetInteger(POSITION_TICKET);
+               openprice = PositionGetDouble(POSITION_PRICE_OPEN);
+               opentime = PositionGetInteger(POSITION_TIME);
+               openlots = PositionGetDouble(POSITION_VOLUME);
+               opensl = PositionGetDouble(POSITION_SL);
+               opentp = PositionGetDouble(POSITION_TP);
+               ticket = PositionGetInteger(POSITION_TICKET);
                break;
             } else {
                if(PositionGetInteger(POSITION_MAGIC) == magic) {
-                  openprice=PositionGetDouble(POSITION_PRICE_OPEN);
-                  opentime=PositionGetInteger(POSITION_TIME);
-                  openlots=PositionGetDouble(POSITION_VOLUME);
-                  opensl=PositionGetDouble(POSITION_SL);
-                  opentp=PositionGetDouble(POSITION_TP);
-                  ticket=PositionGetInteger(POSITION_TICKET);
+                  openprice = PositionGetDouble(POSITION_PRICE_OPEN);
+                  opentime = PositionGetInteger(POSITION_TIME);
+                  openlots = PositionGetDouble(POSITION_VOLUME);
+                  opensl = PositionGetDouble(POSITION_SL);
+                  opentp = PositionGetDouble(POSITION_TP);
+                  ticket = PositionGetInteger(POSITION_TICKET);
                   break;
                }
             }
