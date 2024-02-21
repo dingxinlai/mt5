@@ -10,13 +10,13 @@
 #property indicator_buffers 8
 #property indicator_plots   6
 //--- plot macd
-#property indicator_label1  "macd"
+#property indicator_label1  "fast"
 #property indicator_type1   DRAW_LINE
 #property indicator_color1  clrRed
 #property indicator_style1  STYLE_SOLID
 #property indicator_width1  1
 //--- plot signal
-#property indicator_label2  "signal"
+#property indicator_label2  "slow"
 #property indicator_type2   DRAW_LINE
 #property indicator_color2  clrYellow
 #property indicator_style2  STYLE_SOLID
@@ -51,8 +51,8 @@ input int                InpSlowEMA=26;               // Slow EMA period
 input int                InpSignalSMA=9;              // Signal SMA period
 input ENUM_APPLIED_PRICE InpAppliedPrice=PRICE_CLOSE; // Applied price
 //--- indicator buffers
-double         macdBuffer[];
-double         signalBuffer[];
+double         fastBuffer[];
+double         slowBuffer[];
 double         diffBuffer[];
 double         diffColors[];
 double         upBuffer[];
@@ -66,8 +66,8 @@ int macd_h;
 //+------------------------------------------------------------------+
 int OnInit() {
 //--- indicator buffers mapping
-   SetIndexBuffer(0,macdBuffer,INDICATOR_DATA);
-   SetIndexBuffer(1,signalBuffer,INDICATOR_DATA);
+   SetIndexBuffer(0,fastBuffer,INDICATOR_DATA);
+   SetIndexBuffer(1,slowBuffer,INDICATOR_DATA);
    SetIndexBuffer(2,diffBuffer,INDICATOR_DATA);
    SetIndexBuffer(3,diffColors,INDICATOR_COLOR_INDEX);
    SetIndexBuffer(4,upBuffer,INDICATOR_DATA);
@@ -97,19 +97,19 @@ int OnCalculate(const int rates_total,
                 const long &volume[],
                 const int &spread[]) {
 //---
-   double macd[];
-   double signal[];
-   CopyBuffer(macd_h, 0, 0, rates_total, macd);
-   CopyBuffer(macd_h, 1, 0, rates_total, signal);
+   double fast_ema[];
+   double slow_ema[];
+   CopyBuffer(macd_h, 0, 0, rates_total, fast_ema);
+   CopyBuffer(macd_h, 1, 0, rates_total, slow_ema);
 
    int start = 100;
    if (prev_calculated > 0) {
       start = prev_calculated - 1;
    }
    for (int i = start; i < rates_total; i++) {
-      macdBuffer[i] = macd[i];
-      signalBuffer[i] = signal[i];
-      diffBuffer[i] = macd[i] - signal[i];
+      fastBuffer[i] = fast_ema[i];
+      slowBuffer[i] = slow_ema[i];
+      diffBuffer[i] = fast_ema[i] - slow_ema[i];
       if (diffBuffer[i] > 0) {
          if (diffBuffer[i] > diffBuffer[i - 1]) {
             diffColors[i] = 0;
@@ -123,11 +123,11 @@ int OnCalculate(const int rates_total,
             diffColors[i] = 2;
          }
       }
-      if (macdBuffer[i] > signalBuffer[i] && macdBuffer[i - 1] < signalBuffer[i - 1]) {
-         upBuffer[i] = signalBuffer[i] - 50 * Point();
+      if (fastBuffer[i] > slowBuffer[i] && fastBuffer[i - 1] < slowBuffer[i - 1]) {
+         upBuffer[i] = slowBuffer[i] - 50 * Point();
       }
-      if (macdBuffer[i] < signalBuffer[i] && macdBuffer[i - 1] > signalBuffer[i - 1]) {
-         downBuffer[i] = signalBuffer[i] + 50 * Point();
+      if (fastBuffer[i] < slowBuffer[i] && fastBuffer[i - 1] > slowBuffer[i - 1]) {
+         downBuffer[i] = slowBuffer[i] + 50 * Point();
       }
    }
 
