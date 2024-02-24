@@ -40,8 +40,8 @@ public:
 
 class TrendUtils {
 public:
-                     TrendUtils();
-                    ~TrendUtils();
+                     TrendUtils() {};
+                    ~TrendUtils() {};
    TrendState                        GetTrendState(double &buffer[], const double factorStep);
 
 };
