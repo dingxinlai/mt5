@@ -106,7 +106,7 @@ int OnCalculate(const int rates_total,
    if (prev_calculated > 0) {
       start = prev_calculated - 1;
    }
-   for (int i = start; i < rates_total; i++) {
+   for (int i = start; i < rates_total && !IsStopped(); i++) {
       fastBuffer[i] = fast_ema[i];
       slowBuffer[i] = slow_ema[i];
       diffBuffer[i] = fast_ema[i] - slow_ema[i];
