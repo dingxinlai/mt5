@@ -14,9 +14,13 @@ public:
                      Trading();
                     ~Trading();
    ulong             Buy(string symbol, double lots, int slpoint, int tppoint, string comment, int magic);
+   ulong             Buy(string symbol, double lots, double sl, double tp, string comment, int magic);
+   ulong             Buy(string symbol, double lots, double sl, int tppoint, string comment, int magic);
    ulong             BuyPending(string symbol, double lots, double pendingPrice, int slpoint, int tppoint, string comment, int magic);
    ulong             BuyStopLimit(string symbol, double lots, double stopPrice, double limitPrice, int slpoint, int tppoint, string comment, int magic);
    ulong             Sell(string symbol, double lots, int slpoint, int tppoint, string comment, int magic);
+   ulong             Sell(string symbol, double lots, double sl, double tp, string comment, int magic);
+   ulong             Sell(string symbol, double lots, double sl, int tppoint, string comment, int magic);
    void              CloseAllBuy(string symbol, int magic);
    void              CloseAllSell(string symbol, int magic);
    void              CloseAll(string symbol, int magic);
@@ -81,6 +85,86 @@ ulong Trading::Buy(string symbol, double lots, int slpoint, int tppoint, string 
    order = res.order;
    return (order);
 }
+//+------------------------------------------------------------------+
+ ulong Trading::Buy(string symbol, double lots, double sl, double tp, string comment, int magic) {
+   ulong order = 0;
+   int total = PositionsTotal();
+   for (int i = total - 1; i >= 0; i--) {
+      if (PositionGetTicket(i) > 0) {
+         if (PositionGetString(POSITION_SYMBOL) == symbol
+               && PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY
+               && PositionGetInteger(POSITION_MAGIC) == magic) {
+            return (0);
+         }
+      }
+   }
+   MqlTradeRequest req = {};
+   MqlTradeResult res = {};
+   req.action = TRADE_ACTION_DEAL;
+   req.symbol = symbol;
+   req.type = ORDER_TYPE_BUY;
+   req.volume = lots;
+   req.deviation = deviation;
+
+   double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
+   req.price = ask;
+   if (sl != 0) {
+      req.sl = sl;
+   }
+   if (tp != 0) {
+      req.tp = tp;
+   }
+   req.comment = comment;
+   req.magic = magic;
+
+   if (!OrderSend(req, res)) {
+      PrintFormat("TradeBuy encountered error %d", GetLastError());
+      return (0);
+   }
+   PrintFormat("TradeBuy return code: %u, deal: %I64u, order=%I64u", res.retcode, res.deal, res.order);
+   order = res.order;
+   return (order);
+ }
+ //+------------------------------------------------------------------+
+ ulong Trading::Buy(string symbol, double lots, double sl, int tppoint, string comment, int magic) {
+   ulong order = 0;
+   int total = PositionsTotal();
+   for (int i = total - 1; i >= 0; i--) {
+      if (PositionGetTicket(i) > 0) {
+         if (PositionGetString(POSITION_SYMBOL) == symbol
+               && PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY
+               && PositionGetInteger(POSITION_MAGIC) == magic) {
+            return (0);
+         }
+      }
+   }
+   MqlTradeRequest req = {};
+   MqlTradeResult res = {};
+   req.action = TRADE_ACTION_DEAL;
+   req.symbol = symbol;
+   req.type = ORDER_TYPE_BUY;
+   req.volume = lots;
+   req.deviation = deviation;
+
+   double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
+   req.price = ask;
+   if (sl != 0) {
+      req.sl = sl;
+   }
+   if (tppoint != 0) {
+      req.tp = ask + ((double) tppoint) / 100 * Point();
+   }
+   req.comment = comment;
+   req.magic = magic;
+
+   if (!OrderSend(req, res)) {
+      PrintFormat("TradeBuy encountered error %d", GetLastError());
+      return (0);
+   }
+   PrintFormat("TradeBuy return code: %u, deal: %I64u, order=%I64u", res.retcode, res.deal, res.order);
+   order = res.order;
+   return (order);
+ }
 //+------------------------------------------------------------------+
 ulong Trading::BuyPending(string symbol, double lots, double pendingPrice, int slpoint, int tppoint, string comment, int magic) {
    ulong order = 0;
@@ -208,6 +292,62 @@ ulong Trading::Sell(string symbol, double lots, int slpoint, int tppoint, string
    return (res.order);
 }
 //+------------------------------------------------------------------+
+ulong Trading::Sell(string symbol, double lots, double sl, double tp, string comment, int magic) {
+   MqlTradeRequest req = {};
+   MqlTradeResult res = {};
+   req.action = TRADE_ACTION_DEAL;
+   req.symbol = symbol;
+   req.type = ORDER_TYPE_SELL;
+   req.volume = lots;
+   req.deviation = deviation;
+
+   double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
+   req.price = bid;
+   if (sl != 0) {
+      req.sl = sl;
+   }
+   if (tp != 0) {
+      req.tp = tp;
+   }
+   req.comment = comment;
+   req.magic = magic;
+
+   if (!OrderSend(req, res)) {
+      PrintFormat("TradeSell encountered error %d", GetLastError());
+      return (0);
+   }
+   PrintFormat("TradeSell return code: %u, deal: %I64u, order=%I64u", res.retcode, res.deal, res.order);
+   return (res.order);
+}
+//+------------------------------------------------------------------+
+ulong Trading::Sell(string symbol, double lots, double sl, int tppoint, string comment, int magic) {
+   MqlTradeRequest req = {};
+   MqlTradeResult res = {};
+   req.action = TRADE_ACTION_DEAL;
+   req.symbol = symbol;
+   req.type = ORDER_TYPE_SELL;
+   req.volume = lots;
+   req.deviation = deviation;
+
+   double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
+   req.price = bid;
+   if (sl != 0) {
+      req.sl = sl;
+   }
+   if (tppoint != 0) {
+      req.tp = bid - ((double) tppoint) / 100 * Point();
+   }
+   req.comment = comment;
+   req.magic = magic;
+
+   if (!OrderSend(req, res)) {
+      PrintFormat("TradeSell encountered error %d", GetLastError());
+      return (0);
+   }
+   PrintFormat("TradeSell return code: %u, deal: %I64u, order=%I64u", res.retcode, res.deal, res.order);
+   return (res.order);
+}
+//+------------------------------------------------------------------+
 void Trading::CloseAllBuy(string symbol, int magic) {
    int total = PositionsTotal();
    for(int i = total - 1; i >= 0; i--) {
@@ -278,6 +418,77 @@ void Trading::CloseAllSell(string symbol,int magic = 0) {
                   req.position =PositionGetTicket(i);
                   req.comment  = "平:" + DoubleToString(req.price);
                   if(!OrderSend(req, res))
+                     PrintFormat("OrderSend error %d",GetLastError());
+               }
+            }
+         }
+      }
+   }
+}
+
+//+------------------------------------------------------------------+
+void Trading::CloseAll(string symbol,int magic = 0) {
+   int t=PositionsTotal();
+   for(int i=t-1; i>=0; i--) {
+      if(PositionGetTicket(i)>0) {
+         if(PositionGetString(POSITION_SYMBOL)==symbol && PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY) {
+            if(magic==0) {
+               MqlTradeRequest request= {};
+               MqlTradeResult  result= {};
+               request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+               request.symbol   =symbol;                              // 交易品种
+               request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+               request.type     =ORDER_TYPE_SELL;                        // 订单类型
+               request.price    =SymbolInfoDouble(symbol,SYMBOL_BID); // 持仓价格
+               request.deviation=100; // 允许价格偏差
+               request.type_filling=ORDER_FILLING_IOC;
+               request.position =PositionGetTicket(i);
+               if(!OrderSend(request,result))
+                  PrintFormat("OrderSend error %d",GetLastError());   //
+            } else {
+               if(PositionGetInteger(POSITION_MAGIC)==magic) {
+                  MqlTradeRequest request= {};
+                  MqlTradeResult  result= {};
+                  request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+                  request.symbol   =symbol;                              // 交易品种
+                  request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+                  request.type     =ORDER_TYPE_SELL;                        // 订单类型
+                  request.price    =SymbolInfoDouble(symbol,SYMBOL_BID); // 持仓价格
+                  request.deviation=100; // 允许价格偏差
+                  request.type_filling=ORDER_FILLING_IOC;
+                  request.position =PositionGetTicket(i);
+                  if(!OrderSend(request,result))
+                     PrintFormat("OrderSend error %d",GetLastError());
+               }
+            }
+         }
+         if(PositionGetString(POSITION_SYMBOL)==symbol && PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL) {
+            if(magic==0) {
+               MqlTradeRequest request= {};
+               MqlTradeResult  result= {};
+               request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+               request.symbol   =symbol;                              // 交易品种
+               request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+               request.type     =ORDER_TYPE_BUY;                        // 订单类型
+               request.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
+               request.deviation=100; // 允许价格偏差
+               request.type_filling=ORDER_FILLING_IOC;
+               request.position =PositionGetTicket(i);
+               if(!OrderSend(request,result))
+                  PrintFormat("OrderSend error %d",GetLastError());   // 如果不能发送请求，输出错误
+            } else {
+               if(PositionGetInteger(POSITION_MAGIC)==magic) {
+                  MqlTradeRequest request= {};
+                  MqlTradeResult  result= {};
+                  request.action   =TRADE_ACTION_DEAL;                     // 交易操作类型
+                  request.symbol   =symbol;                              // 交易品种
+                  request.volume   =PositionGetDouble(POSITION_VOLUME); // 0.1手交易量
+                  request.type     =ORDER_TYPE_BUY;                        // 订单类型
+                  request.price    =SymbolInfoDouble(symbol,SYMBOL_ASK); // 持仓价格
+                  request.deviation=100; // 允许价格偏差
+                  request.type_filling=ORDER_FILLING_IOC;
+                  request.position =PositionGetTicket(i);
+                  if(!OrderSend(request,result))
                      PrintFormat("OrderSend error %d",GetLastError());
                }
             }

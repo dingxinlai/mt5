@@ -31,8 +31,8 @@ enum TrendSubType {
 
 struct TrendState {
 public:
-   TrendType                            tt;
-   TrendSubType                         tst;
+   TrendType                            type;
+   TrendSubType                         subType;
 
 
 
@@ -66,29 +66,29 @@ TrendState TrendUtils::GetTrendState(double &buffer[], const double factorStep) 
    int val = (int) MathFloor(total / (length - 1) / factorStep);
    if (val >= 3) val = 3;
    if (val <= -3) val = -3;
-   ts.tt = (TrendType) val;
-   if (ts.tt != 0) {
+   ts.type = (TrendType) val;
+   if (ts.type != 0) {
       bool enhancement = true;
       bool attenuation = true;
       for (int i = 0; i < cad.Total() - 1; i++) {
          double factor = cad.At(i);
-         if (ts.tt > 0) {
+         if (ts.type > 0) {
             enhancement = enhancement && (cad.At(i) > cad.At(i + 1));
             attenuation = attenuation && (cad.At(i) < cad.At(i + 1));
-         } else if (ts.tt < 0) {
+         } else if (ts.type < 0) {
             enhancement = enhancement && (cad.At(i) < cad.At(i + 1));
             attenuation = attenuation && (cad.At(i) > cad.At(i + 1));
          }
       }
       if (enhancement) {
-         ts.tst = Enhancement;
+         ts.subType = Enhancement;
       } else if (attenuation) {
-         ts.tst = Attenuation;
+         ts.subType = Attenuation;
       } else {
-         ts.tst = Unchanged;
+         ts.subType = Unchanged;
       }
    } else {
-      ts.tst = Unchanged;
+      ts.subType = Unchanged;
    }
    return ts;
 }
