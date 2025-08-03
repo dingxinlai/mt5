@@ -500,8 +500,7 @@ bool CTrade::PositionClose(const ulong ticket,const ulong deviation)
    m_request.magic    =m_magic;
    m_request.deviation=(deviation==ULONG_MAX) ? m_deviation : deviation;
 //--- close position
-   bool r = OrderSend(m_request,m_result);
-   return (r);
+   return(OrderSend(m_request,m_result));
   }
 //+------------------------------------------------------------------+
 //| Close one position by other                                      |
