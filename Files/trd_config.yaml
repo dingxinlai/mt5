@@ -1,0 +1,31 @@
+XAUUSD:
+    PERIOD_M30:
+        lots: 0.2
+        threshold: 5.0
+        bc: 0
+        sc: 0
+    PERIOD_H1:
+        lots: 0.3
+        threshold: 5.0
+        bc: 0
+        sc: 0
+    PERIOD_H4:
+        lots: 0.3
+        threshold: 8.0
+        bc: 0
+        sc: 0
+
+XAGUSD:
+    PERIOD_M30:
+        lots: 0.2
+        threshold: 0.25
+    PERIOD_H1:
+        threshold: 0.25
+        
+EURUSD:
+    PERIOD_M30:
+        lots: 0.2
+        threshold: 0.002
+    PERIOD_H1:
+        lots: 0.2
+        threshold: 0.002

@@ -1,0 +1,1083 @@
+SR:
+    Type: Custom
+    Name: Huolong\\SR
+    Load: Lazy
+    Periods: M15, M30, H1
+    M1:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 12
+        InpDeviation: 5
+        InpBackstep: 3
+    M3:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 12
+        InpDeviation: 5
+        InpBackstep: 3
+    M5:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 12
+        InpDeviation: 5
+        InpBackstep: 3
+    M15:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 12
+        InpDeviation: 5
+        InpBackstep: 3
+    M30:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 12
+        InpDeviation: 5
+        InpBackstep: 3
+    H1:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 8
+        InpDeviation: 5
+        InpBackstep: 3
+    H2:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 8
+        InpDeviation: 5
+        InpBackstep: 3
+    H4:
+        LookbackInit: 240
+        LookbackDepth: 100
+        CoefThreshold: 0.002
+        PriceThreshold: 0.0005
+
+        PriceDeviation: 12
+        PriceRegularity: 8
+        LineDeviation: 50
+
+        InpDepth: 12
+        InpDeviation: 5
+        InpBackstep: 3
+        
+MA:
+    Type: BuiltIn
+    Name: MA
+    Load: Lazy
+    Periods: M15, M30, H1(25, 50, 100)
+    M1:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+    M3:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+    M5:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+
+    M15:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+            
+    M30:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+            
+    H1:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+    H2:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE    
+    H4:
+        10:
+            MA_PERIOD: 10
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        25:
+            MA_PERIOD: 25
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        50:
+            MA_PERIOD: 50
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        100:
+            MA_PERIOD: 100
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        144:
+            MA_PERIOD: 144
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        169:
+            MA_PERIOD: 169
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+        200:
+            MA_PERIOD: 200
+            MA_SHIFT: 0
+            MA_METHOD: MODE_EMA
+            APPLIED_PRICE: PRICE_CLOSE
+            
+MA2:
+    Type: Combination
+    Name: MA2
+    Load: Lazy
+    Periods: M15, M30, H1
+    M1:
+        FAST: MA.M1.10
+        SLOW: MA.M1.25
+    M3:
+        FAST: MA.M3.10
+        SLOW: MA.M3.25
+    M5:
+        FAST: MA.M5.10
+        SLOW: MA.M5.25
+    M15:
+        FAST: MA.M15.10
+        SLOW: MA.M15.25
+    M30:
+        FAST: MA.M30.10
+        SLOW: MA.M30.25
+    H1:
+        FAST: MA.H1.10
+        SLOW: MA.H1.25
+    H2:
+        FAST: MA.H2.10
+        SLOW: MA.H2.25
+    H4:
+        FAST: MA.H4.10
+        SLOW: MA.H4.25
+
+VEGAS:
+    Type: Combination
+    Name: VEGAS
+    Load: Lazy
+    Periods: M15, M30, H1
+    M1:
+        FAST: MA2.M1.144
+        SLOW: MA2.M1.169
+    M3:
+        FAST: MA2.M1.144
+        SLOW: MA2.M1.169
+    M5:
+        FAST: MA2.M5.144
+        SLOW: MA2.M5.169
+    M15:
+        FAST: MA2.M15.144
+        SLOW: MA2.M15.169
+    M30:
+        FAST: MA2.M30.144
+        SLOW: MA2.M30.169
+    H1:
+        FAST: MA2.H1.144
+        SLOW: MA2.H1.169
+    H2:
+        FAST: MA2.H2.144
+        SLOW: MA2.H2.169
+    H4:
+        FAST: MA2.H4.144
+        SLOW: MA2.H4.169       
+        
+MACD:
+    Type: BuiltIn
+    Name: MACD
+    Load: Lazy
+    Periods: M15
+    M1:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    M3:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    M5:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    M15:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    M30:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    H1:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    H2:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+    H4:
+        FAST_EMA_PERIOD: 12
+        SLOW_EMA_PERIOD: 26
+        SIGNAL_PERIOD: 9
+        APPLIED_PRICE: PRICE_CLOSE
+
+BANDS:
+    Type: BuiltIn
+    Name: BANDS
+    Load: Lazy
+    Periods: M15
+    M1:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    M3:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    M5:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    M15:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    M30:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    H1:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    H2:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+    H4:
+        BANDS_PERIOD: 20
+        BANDS_SHIFT: 0
+        DEVIATION: 2.4
+        APPLIED_PRICE: PRICE_CLOSE
+
+RSI:
+    Type: BuiltIn
+    Name: RSI
+    Load: Lazy
+    Periods: M15
+    M1:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    M3:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    M5:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    M15:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    M30:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    H1:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    H2:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+    H4:
+        MA_PERIOD: 14
+        APPLIED_PRICE: PRICE_CLOSE
+
+FIBONACCI:
+    Type: Custom
+    Name: Huolong\\Fibonacci
+    Load: Lazy
+    Periods: M15
+    M1:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    M3:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    M5:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    M15:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    M30:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    H1:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    H2:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+    H4:
+        DEPTH: 24
+        DEVIATION: 5
+        BACKSTEP: 3
+
+ICHIMOKU:
+    Type: BuiltIn
+    Name: ICHIMOKU
+    Load: Lazy
+    Periods: M15
+    M1:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+    M3:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+    M5:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52 
+    M15:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+    M30:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+    H1:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+    H2:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+    H4:
+        TENKAN_PERIOD: 9
+        KIJUN_PERIOD: 26
+        SENKOU_PERIOD: 52
+
+ADX:
+    Type: BuiltIn
+    Name: ADX
+    Load: Lazy
+    Periods: M15, M30, H1
+    M1:
+        ADX_PERIOD: 14
+    M3:
+        ADX_PERIOD: 14
+    M5:
+        ADX_PERIOD: 14
+    M15:
+        ADX_PERIOD: 14
+    M30:
+        ADX_PERIOD: 14
+    H1:
+        ADX_PERIOD: 14
+    H2:
+        ADX_PERIOD: 14
+    H4:
+        ADX_PERIOD: 14
+
+ATR:
+    Type: BuiltIn
+    Name: ATR
+    Load: Lazy
+    Periods: M15
+    M1:
+        ATR_PERIOD: 14
+    M3:
+        ATR_PERIOD: 14
+    M5:
+        ATR_PERIOD: 14
+    M15:
+        ATR_PERIOD: 14
+    M30:
+        ATR_PERIOD: 14
+    H1:
+        ATR_PERIOD: 14
+    H2:
+        ATR_PERIOD: 14
+    H4:
+        ATR_PERIOD: 14
+        
+STOCHASTIC:
+    Type: BuiltIn
+    Name: STOCHASTIC
+    Load: Lazy
+    Periods: M15(5, 9, 16, 25)
+    M1:
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+    M3:
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+    M5: 
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+    M15: 
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+    M30: 
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH            
+    H1: 
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+    H2: 
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+    H4: 
+        5:
+            K_PERIOD: 5
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        9:
+            K_PERIOD: 9
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH    
+        16:
+            K_PERIOD: 16
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+        25:
+            K_PERIOD: 25
+            D_PERIOD: 3
+            SLOWING: 3
+            MA_METHOD: MODE_EMA
+            PRICE_FIELD: STO_LOWHIGH
+  
+SAR:
+    Type: BuiltIn
+    Name: SAR
+    Load: Lazy
+    Periods: M15
+    M1: 
+        STEP: 0.005
+        MAXIMUM: 0.05
+    M3: 
+        STEP: 0.005
+        MAXIMUM: 0.05
+    M5: 
+        STEP: 0.003
+        MAXIMUM: 0.03
+    M15: 
+        STEP: 0.003
+        MAXIMUM: 0.03
+    M30: 
+        STEP: 0.0025
+        MAXIMUM: 0.025
+    H1: 
+        STEP: 0.002
+        MAXIMUM: 0.02
+    H2: 
+        STEP: 0.006
+        MAXIMUM: 0.06
+    H4: 
+        STEP: 0.006
+        MAXIMUM: 0.06
+
+ST:
+    Type: Custom
+    Name: Huolong\\ST
+    Load: Lazy
+    Periods: M15, M30, H1, H4
+    M1:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+    M3:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+    M5:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+    M15:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+    M30:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+    H1:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+    H4:
+        PREFIX: ST
+        MULTIPLIER: 3.0
+        
+HASHI:
+    Type: Custom
+    Name: Examples\\Heiken_Ashi
+    Load: Lazy
+    Periods: M15, M30, H1
+    
+AMA:
+    Type: BuiltIn
+    Name: AMA
+    Load: Lazy
+    Periods: M15
+    M1:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    M3:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    M5:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    M15:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    M30:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    H1:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    H2:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+    H4:
+        AMA_PERIOD: 15
+        FAST_MA_PERIOD: 2
+        SLOW_MA_PERIOD: 30
+        AMA_SHIFT: 0
+        APPLIED_PRICE: PRICE_OPEN
+        
+BBK:
+    Type: Custom
+    Name: Huolong\\BBSqueeze
+    Load: Lazy
+    Periods: M15
+    M1:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    M3:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    M5:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    M15:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    M30:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    H1:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    H2:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+    H4:
+        BBK_PERIOD: 20
+        APPLIED_PRICE: PRICE_CLOSE
+        BB_WIDTH: 2.0
+        K_WIDTH: 1.5
+        
+VWAP:
+    Type: Custom
+    Name: Huolong\\VWAP
+    Load: Boot
+    Periods: M15

@@ -1,0 +1,36 @@
+b2 --with-python toolset=msvc-14.3 address-model=64 python=3.10 link=shared threading=multi runtime-link=shared
+
+https://gitee.com/being_away/Quant.git
+
+
+Name     : Ding Xin
+Type     : Forex Hedged USD
+Server   : MetaQuotes-Demo
+Login    : 5036135256
+Password : F-N0LeEl
+Investor : H_G4RbSl
+
+22950
+24500
+5个红不开仓
+金叉不开空单
+驱动启动 距离MA20距离是否需要较远
+移动平均下降5点阈值
+span远端作为止损
+记录上次信号对应价格 比较价格差距
+空单假如亏了 必须比上次价格低才能再次空
+震荡盘不看均价 只看SAR？
+KDJ + 布林带 震荡盘？ 
+SPAN A & SPAN B之间不开单
+
+
+逆势策略碰到下次挤压重置
+逆势开始时候需要比标记信号的价格低
+
+只按照前一个AS
+止损设置为前一个
+15min
+
+
+
+我按照上述代码改为以下代码， 我的sample csv中有五列数据  datetime, open close high low 为XAUUSD的K线数据，我需要训练预测未来数据
