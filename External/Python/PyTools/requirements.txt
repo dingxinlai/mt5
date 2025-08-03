@@ -1,0 +1,13 @@
+﻿gradio
+mlflow
+numpy
+pandas
+ray
+scikit-learn
+torch
+torchinfo
+uv
+openpyxl
+pyyaml
+pandas_ta
+matplotlib
