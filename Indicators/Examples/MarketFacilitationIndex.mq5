@@ -1,16 +1,16 @@
 //+------------------------------------------------------------------+
 //|                                      MarketFacilitationIndex.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_separate_window
 #property indicator_buffers 2
 #property indicator_plots   1
 #property indicator_type1   DRAW_COLOR_HISTOGRAM
-#property indicator_color1  Lime,SaddleBrown,Blue,Pink
+#property indicator_color1  clrLime,clrSaddleBrown,clrBlue,clrPink
 #property indicator_width1  2
 //--- input parameter
 input ENUM_APPLIED_VOLUME InpVolumeType=VOLUME_TICK; // Volumes

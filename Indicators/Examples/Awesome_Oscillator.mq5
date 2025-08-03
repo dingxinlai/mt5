@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                           Awesome_Oscillator.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 
 //--- indicator settings
@@ -11,7 +11,7 @@
 #property indicator_buffers 4
 #property indicator_plots   1
 #property indicator_type1   DRAW_COLOR_HISTOGRAM
-#property indicator_color1  Green,Red
+#property indicator_color1  clrGreen,clrRed
 #property indicator_width1  1
 #property indicator_label1  "AO"
 //--- indicator buffers

@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                   Stochastic.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_separate_window
@@ -11,8 +11,8 @@
 #property indicator_plots   2
 #property indicator_type1   DRAW_LINE
 #property indicator_type2   DRAW_LINE
-#property indicator_color1  LightSeaGreen
-#property indicator_color2  Red
+#property indicator_color1  clrLightSeaGreen
+#property indicator_color2  clrRed
 #property indicator_style2  STYLE_DOT
 //--- input parameters
 input int InpKPeriod=5;  // K period

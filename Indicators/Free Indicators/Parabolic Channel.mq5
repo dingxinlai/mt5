@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                            Parabolic Channel.mq5 |
-//|                              Copyright 2009-2024, MetaQuotes Ltd |
+//|                              Copyright 2009-2025, MetaQuotes Ltd |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "2009-2024, MetaQuotes Ltd"
+#property copyright   "2009-2025, MetaQuotes Ltd"
 #property link        "http://www.mql5.com"
 #property description "Parabolic Channel"
 
@@ -27,9 +27,9 @@
 #property indicator_label3  "Lower "
 
 //--- input parameters
-input double InpSARStep=0.02;    // Step
+input double InpSARStep   =0.02; // Step
 input double InpSARMaximum=0.2;  // Maximum
-input bool InpShowLabel=true;    // Show price of level
+input bool   InpShowLabel =true; // Show price of level
 
 //--- indicator buffers
 double ExtUpperBuffer[];

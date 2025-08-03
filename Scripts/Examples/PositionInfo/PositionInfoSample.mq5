@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                           PositionInfoSample.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //---
 #include <Trade\PositionInfo.mqh>
@@ -75,12 +75,12 @@ bool CPositionInfoSample::Init(void)
 //--- creation Buttons
    m_button_prev.Create(0,"ButtonPrev",0,10,sy,100,20);
    m_button_prev.Description("Prev Position");
-   m_button_prev.Color(Red);
+   m_button_prev.Color(clrRed);
    m_button_prev.FontSize(8);
 //---
    m_button_next.Create(0,"ButtonNext",0,110,sy,100,20);
    m_button_next.Description("Next Position");
-   m_button_next.Color(Red);
+   m_button_next.Color(clrRed);
    m_button_next.FontSize(8);
 //---
    sy+=20;

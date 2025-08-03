@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                            ColorCandlesDaily.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 
 #property indicator_separate_window
@@ -19,7 +19,7 @@ double ExtLowBuffer[];
 double ExtCloseBuffer[];
 double ExtColorsBuffer[];
 //---
-color  ExtColorOfDay[6]= {CLR_NONE,MediumSlateBlue,DarkGoldenrod,ForestGreen,BlueViolet,Red};
+color  ExtColorOfDay[6]= {clrNONE,clrMediumSlateBlue,clrDarkGoldenrod,clrForestGreen,clrBlueViolet,clrRed};
 //+------------------------------------------------------------------+
 //| Custom indicator initialization function                         |
 //+------------------------------------------------------------------+

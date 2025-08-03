@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                             Donchian Channel.mq5 |
-//|                              Copyright 2009-2024, MetaQuotes Ltd |
+//|                              Copyright 2009-2025, MetaQuotes Ltd |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "2009-2024, MetaQuotes Ltd"
+#property copyright   "2009-2025, MetaQuotes Ltd"
 #property link        "http://www.mql5.com"
 #property description "Donchian Channel"
 //---
@@ -22,8 +22,8 @@
 #property indicator_label3  "Lower Donchian"
 
 //--- input parameter
-input int InpDonchianPeriod=20;    //  period of the channel
-input bool InpShowLabel=true;      //  show price of the level
+input int  InpDonchianPeriod=20;    // period of the channel
+input bool InpShowLabel     =true;  // show price of the level
 
 //--- indicator buffers
 double    ExtUpBuffer[];

@@ -1,22 +1,23 @@
 //+------------------------------------------------------------------+
-//|                                               Market Profile.mq5 |
-//|                              Copyright 2009-2024, MetaQuotes Ltd |
+//|                                                MarketProfile.mq5 |
+//|                              Copyright 2009-2025, MetaQuotes Ltd |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2022, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 #property version   "1.00"
 #property indicator_chart_window
+#property indicator_plots 0
 
 //--- input parameters
-input uint  InpStartDate = 0;                // day number to start calculation
-input uint  InpShowDays = 3;                 // number of days to display
-input int   InpMultiplier = 1;               // histogram length multiplier
-input color InpAsiaSession = clrGold;        // Asian session
-input color InpEuropeSession = clrBlue;      // European session
-input color InpAmericaSession = clrViolet;   // American session
-input uint  InpEuropeStartHour = 8;          // European session opening hour
-input uint  InpAmericaStartHour = 14;        // American session opening hour
+input uint  InpStartDate       =0;           // day number to start calculation
+input uint  InpShowDays        =3;           // number of days to display
+input int   InpMultiplier      =1;           // histogram length multiplier
+input color InpAsiaSession     =clrGold;     // Asian session
+input color InpEuropeSession   =clrBlue;     // European session
+input color InpAmericaSession  =clrViolet;   // American session
+input uint  InpEuropeStartHour =8;           // European session opening hour
+input uint  InpAmericaStartHour=14;          // American session opening hour
 
 //--- unique prefix to identify indicator objects
 string ExtPrefixUniq;

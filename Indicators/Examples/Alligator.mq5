@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                    Alligator.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 
 //--- indicator settings
@@ -13,9 +13,9 @@
 #property indicator_type1   DRAW_LINE
 #property indicator_type2   DRAW_LINE
 #property indicator_type3   DRAW_LINE
-#property indicator_color1  Blue
-#property indicator_color2  Red
-#property indicator_color3  Lime
+#property indicator_color1  clrBlue
+#property indicator_color2  clrRed
+#property indicator_color3  clrLime
 #property indicator_width1  1
 #property indicator_width2  1
 #property indicator_width3  1

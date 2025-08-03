@@ -1,4 +1,8 @@
 .vscodegit
-Logs\
-Experts\*.ex5
-Experts\**\*.ex5
+.idea/
+Logs/
+# Ignore all .ex5 files (compiled MT5 files) in any directory
+*.ex5
+**/*.ex5
+External/Python/boost_1_87_0/
+Libraries/

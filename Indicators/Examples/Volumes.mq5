@@ -1,16 +1,16 @@
 //+------------------------------------------------------------------+
 //|                                                      Volumes.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_separate_window
 #property indicator_buffers 2
 #property indicator_plots   1
 #property indicator_type1   DRAW_COLOR_HISTOGRAM
-#property indicator_color1  Green,Red
+#property indicator_color1  clrGreen,clrRed
 #property indicator_style1  0
 #property indicator_width1  1
 #property indicator_minimum 0.0

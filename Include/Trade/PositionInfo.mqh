@@ -1,6 +1,6 @@
 //+------------------------------------------------------------------+
 //|                                                 PositionInfo.mqh |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
 #include <Object.mqh>
@@ -180,7 +180,9 @@ double CPositionInfo::PriceCurrent(void) const
 //+------------------------------------------------------------------+
 double CPositionInfo::Commission(void) const
   {
-   return(PositionGetDouble(POSITION_COMMISSION));
+//--- property POSITION_COMMISSION is deprecated
+   SetUserError(ERR_FUNCTION_NOT_ALLOWED);
+   return(0);
   }
 //+------------------------------------------------------------------+
 //| Get the property value "POSITION_SWAP"                           |

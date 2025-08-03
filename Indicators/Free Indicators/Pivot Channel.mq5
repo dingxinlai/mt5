@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                Pivot Channel.mq5 |
-//|                              Copyright 2009-2024, MetaQuotes Ltd |
+//|                              Copyright 2009-2025, MetaQuotes Ltd |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "2009-2024, MetaQuotes Ltd"
+#property copyright   "2009-2025, MetaQuotes Ltd"
 #property link        "http://www.mql5.com"
 #property description "Pivot Daily Channels"
 
@@ -32,8 +32,8 @@
 #property indicator_label9  "M4"
 
 //--- input parameters
-input bool    InpShowLevelsM=false;    // show M levels
-input bool    InpShowLabel=true;       // show price of level
+input bool    InpShowLevelsM=false; // show M levels
+input bool    InpShowLabel  =true;  // show price of level
 
 //--- indicator buffers
 double        ExtPPBuffer[];

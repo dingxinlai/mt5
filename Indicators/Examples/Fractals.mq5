@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                     Fractals.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_chart_window
@@ -11,8 +11,8 @@
 #property indicator_plots   2
 #property indicator_type1   DRAW_ARROW
 #property indicator_type2   DRAW_ARROW
-#property indicator_color1  Gray
-#property indicator_color2  Gray
+#property indicator_color1  clrGray
+#property indicator_color2  clrGray
 #property indicator_label1  "Fractal Up"
 #property indicator_label2  "Fractal Down"
 //--- indicator buffers

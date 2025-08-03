@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                 NRTR Channel.mq5 |
-//|                              Copyright 2009-2024, MetaQuotes Ltd |
+//|                              Copyright 2009-2025, MetaQuotes Ltd |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "2009-2024, MetaQuotes Ltd"
+#property copyright   "2009-2025, MetaQuotes Ltd"
 #property link        "http://www.mql5.com"
 #property description "NRTR Channel"
 //---
@@ -25,9 +25,9 @@
 #property indicator_label4  "Short Resistance"
 
 //--- inputs
-input int    InpATRPeriod=40;      // ATR period
-input double InpkATR=2.0;          // ATR multiplier
-input bool   InpShowLabel=true;    // show price of level
+input int    InpATRPeriod=40;    // ATR period
+input double InpkATR     =2.0;   // ATR multiplier
+input bool   InpShowLabel=true;  // show price of level
 
 //--- uptrend buffers
 double ExtCeilingBuffer[];

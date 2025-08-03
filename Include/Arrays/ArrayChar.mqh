@@ -1,13 +1,12 @@
 //+------------------------------------------------------------------+
 //|                                                    ArrayChar.mqh |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
 #include "Array.mqh"
 //+------------------------------------------------------------------+
 //| Class CArrayChar.                                                |
-//| Purpose: Class of dynamic array of variables                     |
-//|          of char or uchar type.                                  |
+//| Purpose: Class of dynamic array of char type values.             |
 //|          Derives from class CArray.                              |
 //+------------------------------------------------------------------+
 class CArrayChar : public CArray

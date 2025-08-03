@@ -1,12 +1,12 @@
 //+------------------------------------------------------------------+
 //|                                                  ArrayString.mqh |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
 #include "Array.mqh"
 //+------------------------------------------------------------------+
 //| Class CArrayString.                                              |
-//| Purpose: Class of dynamic array of variables of string type.     |
+//| Purpose: Class of dynamic array of string type values.           |
 //|          Derives from class CArray.                              |
 //+------------------------------------------------------------------+
 class CArrayString : public CArray

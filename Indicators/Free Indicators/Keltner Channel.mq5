@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                              Keltner Channel.mq5 |
-//|                              Copyright 2009-2024, MetaQuotes Ltd |
+//|                              Copyright 2009-2025, MetaQuotes Ltd |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "2009-2024, MetaQuotes Ltd"
+#property copyright   "2009-2025, MetaQuotes Ltd"
 #property link        "http://www.mql5.com"
 #property description "Keltner Channel"
 
@@ -22,10 +22,10 @@
 #property indicator_label3  "Lower Keltner"
 
 //--- input parameters
-input int    InpEMAPeriod=20;     //  Period of EMA
-input int    InpATRPeriod=10;     //  Period of ATR
-input double InpATRFactor=2.0;    //  ATR multiplier
-input bool   InpShowLabel=true;   //  show price of level
+input int    InpEMAPeriod=20;    // Period of EMA
+input int    InpATRPeriod=10;    // Period of ATR
+input double InpATRFactor=2.0;   // ATR multiplier
+input bool   InpShowLabel=true;  // Show price of level
 
 
 //--- global variables for parameters

@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                    ColorBars.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 
 #property indicator_chart_window
@@ -12,7 +12,7 @@
 //--- plot ColorBars
 #property indicator_label1  "ColorBars"
 #property indicator_type1   DRAW_COLOR_BARS
-#property indicator_color1  Green,Red
+#property indicator_color1  clrGreen,clrRed
 #property indicator_label1  "Open;High;Low;Close"
 //--- indicator buffers
 double ExtOpenBuffer[];

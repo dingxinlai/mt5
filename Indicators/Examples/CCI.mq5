@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                          CCI.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright   "Copyright 2000-2025, MetaQuotes Ltd."
 #property link        "https://www.mql5.com"
 #property description "Commodity Channel Index"
 #include <MovingAverages.mqh>
@@ -12,7 +12,7 @@
 #property indicator_buffers       4
 #property indicator_plots         1
 #property indicator_type1         DRAW_LINE
-#property indicator_color1        LightSeaGreen
+#property indicator_color1        clrLightSeaGreen
 #property indicator_level1       -100.0
 #property indicator_level2        100.0
 #property indicator_applied_price PRICE_TYPICAL

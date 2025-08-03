@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                         OsMA.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright   "Copyright 2000-2025, MetaQuotes Ltd."
 #property link        "https://www.mql5.com"
 #property description "Moving Average of Oscillator"
 #property description "aka MACD histogram"
@@ -13,7 +13,7 @@
 #property indicator_buffers 5
 #property indicator_plots   1
 #property indicator_type1   DRAW_HISTOGRAM
-#property indicator_color1  Silver
+#property indicator_color1  clrSilver
 #property indicator_width1  2
 //--- input parameters
 input int                InpFastEMAPeriod=12;         // Fast EMA period

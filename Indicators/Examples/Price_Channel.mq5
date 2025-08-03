@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                               Price_Channell.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_chart_window
@@ -11,8 +11,8 @@
 #property indicator_plots   2
 #property indicator_type1   DRAW_FILLING
 #property indicator_type2   DRAW_LINE
-#property indicator_color1  DodgerBlue,Gray
-#property indicator_color2  Blue
+#property indicator_color1  clrDodgerBlue,clrGray
+#property indicator_color2  clrBlue
 #property indicator_label1  "Channel upper;Channel lower"
 #property indicator_label2  "Channel median"
 //--- input parameters

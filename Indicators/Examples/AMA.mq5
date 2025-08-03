@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                          AMA.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright   "Copyright 2000-2025, MetaQuotes Ltd."
 #property link        "https://www.mql5.com"
 #property version     "1.00"
 #property description "Adaptive Moving Average"
@@ -14,7 +14,7 @@
 //--- plot ExtAMABuffer
 #property indicator_label1  "AMA"
 #property indicator_type1   DRAW_LINE
-#property indicator_color1  Red
+#property indicator_color1  clrRed
 #property indicator_style1  STYLE_SOLID
 #property indicator_width1  1
 //--- default applied price

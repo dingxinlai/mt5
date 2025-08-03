@@ -1,6 +1,6 @@
 //+------------------------------------------------------------------+
 //|                                                       Canvas.mqh |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
 #include <Files\FileBin.mqh>
@@ -252,8 +252,10 @@ bool CCanvas::Create(const string name,const int width,const int height,ENUM_COL
 //--- prepare data array
    if(width>0 && height>0 && ArrayResize(m_pixels,width*height)>0)
      {
-      //--- generate resource name
-      m_rcname="::"+name+(string)ChartID()+(string)(GetTickCount()+MathRand());
+      //--- generate uniq resource name
+      string uniq=(string)ChartID()+(string)GetTickCount()+"."+(string)(GetMicrosecondCount()&0x3FF);
+
+      m_rcname="::" + StringSubstr(name,0,63-StringLen(uniq))+uniq;
       //--- initialize data with zeros
       ArrayInitialize(m_pixels,0);
       //--- create dynamic resource
@@ -357,7 +359,7 @@ bool CCanvas::Attach(const long chart_id,const string objname,ENUM_COLOR_FORMAT 
      {
       string rcname=ObjectGetString(chart_id,objname,OBJPROP_BMPFILE);
       rcname=StringSubstr(rcname,StringFind(rcname,"::"));
-      if(ResourceReadImage(rcname,m_pixels,m_width,m_height))
+      if(ResourceReadImage(rcname,m_pixels,(uint&)m_width,(uint&)m_height))
         {
          m_chart_id=chart_id;
          m_objname=objname;
@@ -2618,14 +2620,14 @@ void CCanvas::FontGet(string &name,int &size,uint &flags,uint &angle)
 void CCanvas::TextOut(int x,int y,string text,const uint clr,uint alignment)
   {
    if(FontSet())
-      TextOut(text,x,y,alignment,m_pixels,m_width,m_height,clr,m_format);
+      ::TextOut(text,x,y,alignment,m_pixels,m_width,m_height,clr,m_format);
   }
 //+------------------------------------------------------------------+
 //| Out text                                                         |
 //+------------------------------------------------------------------+
 void CCanvas::TextOutFast(int x,int y,string text,const uint clr,uint alignment)
   {
-   TextOut(text,x,y,alignment,m_pixels,m_width,m_height,clr,m_format);
+   ::TextOut(text,x,y,alignment,m_pixels,m_width,m_height,clr,m_format);
   }
 //+------------------------------------------------------------------+
 //| Text width                                                       |
@@ -2635,10 +2637,10 @@ int CCanvas::TextWidth(const string text)
    if(!FontSet())
       return(0);
 //---
-   int w,h;
-   TextGetSize(text,w,h);
+   uint w,h;
+   ::TextGetSize(text,w,h);
 //--- result
-   return(w);
+   return((int)w);
   }
 //+------------------------------------------------------------------+
 //| Text height                                                      |
@@ -2648,10 +2650,10 @@ int CCanvas::TextHeight(const string text)
    if(!FontSet())
       return(0);
 //---
-   int w,h;
-   TextGetSize(text,w,h);
+   uint w,h;
+   ::TextGetSize(text,w,h);
 //--- result
-   return(h);
+   return((int)h);
   }
 //+------------------------------------------------------------------+
 //| Text rectangle                                                   |
@@ -2659,7 +2661,7 @@ int CCanvas::TextHeight(const string text)
 void CCanvas::TextSize(const string text,int &width,int &height)
   {
    if(FontSet())
-      TextGetSize(text,width,height);
+      ::TextGetSize(text,(uint&)width,(uint&)height);
   }
 //+------------------------------------------------------------------+
 //| Load data from file                                              |

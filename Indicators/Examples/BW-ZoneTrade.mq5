@@ -1,16 +1,16 @@
 //+------------------------------------------------------------------+
 //|                                                 BW-ZoneTrade.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_chart_window
 #property indicator_buffers 7
 #property indicator_plots   1
 #property indicator_type1   DRAW_COLOR_CANDLES
-#property indicator_color1  Green,Red,Gray
+#property indicator_color1  clrGreen,clrRed,clrGray
 #property indicator_width1  3
 #property indicator_label1  "Open;High;Low;Close"
 //--- indicator buffers

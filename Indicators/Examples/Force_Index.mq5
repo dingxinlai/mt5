@@ -1,16 +1,16 @@
 //+------------------------------------------------------------------+
 //|                                                  Force_Index.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright "Copyright 2000-2025, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 //--- indicator settings
 #property indicator_separate_window
 #property indicator_buffers 2
 #property indicator_plots   1
 #property indicator_type1   DRAW_LINE
-#property indicator_color1  DodgerBlue
+#property indicator_color1  clrDodgerBlue
 //--- input parameters
 input int                 InpForcePeriod=13;             // Period
 input ENUM_MA_METHOD      InpMAMethod=MODE_SMA;          // MA method

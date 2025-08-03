@@ -1,9 +1,9 @@
 //+------------------------------------------------------------------+
 //|                                                         TEMA.mq5 |
-//|                             Copyright 2000-2024, MetaQuotes Ltd. |
+//|                             Copyright 2000-2025, MetaQuotes Ltd. |
 //|                                             https://www.mql5.com |
 //+------------------------------------------------------------------+
-#property copyright   "Copyright 2000-2024, MetaQuotes Ltd."
+#property copyright   "Copyright 2000-2025, MetaQuotes Ltd."
 #property link        "https://www.mql5.com"
 #property description "Triple Exponential Moving Average"
 #include <MovingAverages.mqh>
@@ -12,7 +12,7 @@
 #property indicator_buffers 4
 #property indicator_plots   1
 #property indicator_type1   DRAW_LINE
-#property indicator_color1  DarkBlue
+#property indicator_color1  clrDarkBlue
 #property indicator_width1  1
 #property indicator_label1  "TEMA"
 #property indicator_applied_price PRICE_CLOSE
