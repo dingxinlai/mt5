@@ -1,6 +1,7 @@
 .vscodegit
 .idea/
 Logs/
+Profiles/
 # Ignore all .ex5 files (compiled MT5 files) in any directory
 *.ex5
 **/*.ex5
