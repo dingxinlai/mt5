@@ -572,8 +572,8 @@ void SuperStrategy::ProcessTakeProfit(void) {
 //| 检查Vegas通道距离是否足够使用Vegas止盈                            |
 //+------------------------------------------------------------------+
 bool SuperStrategy::CheckVegasDistance(DIRECTION direction) {
-   double vegas_upper = vegas_m30_handle.Upper(0);
-   double vegas_lower = vegas_m30_handle.Lower(0);
+   double vegas_upper = vegas_m15_handle.Upper(0);
+   double vegas_lower = vegas_m15_handle.Lower(0);
    double distance_required = atr_value * 4.0; // 4倍ATR
 
    if (direction == BUY) {
@@ -595,8 +595,8 @@ bool SuperStrategy::CheckVegasTpCondition(DIRECTION direction) {
                          SymbolInfoDouble(symbol, SYMBOL_BID) : 
                          SymbolInfoDouble(symbol, SYMBOL_ASK);
    
-   double vegas_upper = vegas_m30_handle.Upper(0);
-   double vegas_lower = vegas_m30_handle.Lower(0);
+   double vegas_upper = vegas_m15_handle.Upper(0);
+   double vegas_lower = vegas_m15_handle.Lower(0);
    
    if (direction == BUY) {
       // 做多：价格触及Vegas下沿
