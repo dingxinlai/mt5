@@ -689,7 +689,7 @@ ATR:
     Type: BuiltIn
     Name: ATR
     Load: Lazy
-    Periods: M15
+    Periods: M15, M30
     M1:
         ATR_PERIOD: 14
     M3:
@@ -950,25 +950,25 @@ ST:
     Periods: M15, M30, H1
     M1:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
     M3:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
     M5:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
     M15:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
     M30:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
     H1:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
     H4:
         PREFIX: ST
-        MULTIPLIER: 1.0
+        MULTIPLIER: 2.0
         
 HASHI:
     Type: Custom
@@ -1080,4 +1080,4 @@ VWAP:
     Type: Custom
     Name: Huolong\\VWAP
     Load: Boot
-    Periods: M15
+    Periods: M15, M30

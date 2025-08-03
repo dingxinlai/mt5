@@ -76,6 +76,12 @@ class SuperStrategy : public Strategy {
       int                           reversal_confirm_bars;  // 反转确认K线数
       int                           last_reversal_bar;      // 最后检测到反转的K线
       
+      // 开仓准备状态管理
+      bool                          ready_buy;              // 准备做多状态
+      bool                          ready_sell;             // 准备做空状态
+      double                        ready_buy_vwap;         // 进入准备做多状态时的VWAP价格
+      double                        ready_sell_vwap;        // 进入准备做空状态时的VWAP价格
+      
       void                          SyncOrder(void);
       bool                          ShouldBuy(void);
       bool                          ShouldSell(void);
@@ -85,6 +91,7 @@ class SuperStrategy : public Strategy {
       bool                          CheckVegasDistance(DIRECTION direction);
       bool                          CheckVegasTpCondition(DIRECTION direction);
       bool                          CheckVwapReversal(DIRECTION direction);
+      bool                          CheckSuperTrendReversal(DIRECTION direction);
    public:
       SuperStrategy(string symbol, ENUM_TIMEFRAMES period, int magic, IndicatorManager* im);
       ~SuperStrategy(void);
@@ -135,6 +142,12 @@ SuperStrategy::SuperStrategy(string _symbol, ENUM_TIMEFRAMES _period, int _magic
    reversal_confirm_bars = config.GetInt(symbol + ".reversal_confirm_bars", 2); // 默认需要2根K线确认反转
    last_reversal_bar = 0;
    
+   // 初始化开仓准备状态
+   ready_buy = false;
+   ready_sell = false;
+   ready_buy_vwap = 0.0;
+   ready_sell_vwap = 0.0;
+   
    // 初始化指标
    st_handle = im.GetST(period, buffer_size);
    ema_m15_handle = im.GetMA(PERIOD_M15, 100, buffer_size);
@@ -147,7 +160,7 @@ SuperStrategy::SuperStrategy(string _symbol, ENUM_TIMEFRAMES _period, int _magic
    vegas_m60_handle = im.GetVegas(PERIOD_H1, buffer_size);
 
    // 初始化策略参数
-   lots = config.GetDouble(symbol + ".M15.lots", 0.1);
+   lots = config.GetDouble(symbol + ".M15.lots", 0.4);
    
    Print("SuperStrategy初始化完毕 - Magic:", magic, " Lots:", lots);
 }
@@ -248,13 +261,77 @@ void SuperStrategy::Execute(void) {
 
 
 bool SuperStrategy::ShouldBuy(void) {
-   bool vwap_bullish = iClose(symbol, period, 0) > vwap_handle.data[0] && iClose(symbol, period, 1) > vwap_handle.data[1] && iClose(symbol, period, 2) <= vwap_handle.data[2]; 
-   return vwap_bullish;
+   // 检查VWAP上穿信号，进入准备做多状态
+   // 要求连续两根K线(1,2)都大于VWAP，第3根小于VWAP，防止插针
+   bool vwap_bullish = iClose(symbol, period, 1) > vwap_handle.data[1] && 
+                       iClose(symbol, period, 2) > vwap_handle.data[2] && 
+                       iClose(symbol, period, 3) <= vwap_handle.data[3];
+   
+   if (vwap_bullish && !ready_buy) {
+      ready_buy = true;
+      ready_buy_vwap = vwap_handle.data[1]; // 记录进入准备状态时的VWAP价格
+      Print("进入准备做多状态，记录VWAP价格: ", ready_buy_vwap);
+   }
+   
+   // 如果处于准备状态，检查是否满足开仓条件
+   if (ready_buy) {
+      double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
+      
+      // 使用记录的VWAP价格作为基准，检查是否满足开仓条件：收盘价 > 记录的VWAP + 2倍ATR
+      bool can_open = current_close > ready_buy_vwap + (atr_value * 2.0);
+      
+      // 检查是否回到中性区域，取消准备状态
+      // 使用记录的VWAP价格作为中性区域的基准
+      bool back_to_neutral = current_close <= ready_buy_vwap;
+      
+      if (back_to_neutral) {
+         ready_buy = false;
+         ready_buy_vwap = 0.0;
+         Print("回到中性区域，取消准备做多状态");
+         return false;
+      }
+      
+      return can_open;
+   }
+   
+   return false;
 }
 
 bool SuperStrategy::ShouldSell(void) {
-   bool vwap_bearish = iClose(symbol, period, 0) < vwap_handle.data[0] && iClose(symbol, period, 1) < vwap_handle.data[1] && iClose(symbol, period, 2) >= vwap_handle.data[2];
-   return vwap_bearish;
+   // 检查VWAP下穿信号，进入准备做空状态
+   // 要求连续两根K线(1,2)都小于VWAP，第3根大于VWAP，防止插针
+   bool vwap_bearish = iClose(symbol, period, 1) < vwap_handle.data[1] && 
+                       iClose(symbol, period, 2) < vwap_handle.data[2] && 
+                       iClose(symbol, period, 3) >= vwap_handle.data[3];
+   
+   if (vwap_bearish && !ready_sell) {
+      ready_sell = true;
+      ready_sell_vwap = vwap_handle.data[1]; // 记录进入准备状态时的VWAP价格
+      Print("进入准备做空状态，记录VWAP价格: ", ready_sell_vwap);
+   }
+   
+   // 如果处于准备状态，检查是否满足开仓条件
+   if (ready_sell) {
+      double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
+      
+      // 使用记录的VWAP价格作为基准，检查是否满足开仓条件：收盘价 < 记录的VWAP - 2倍ATR
+      bool can_open = (current_close < ready_sell_vwap - (atr_value * 2.0));
+      
+      // 检查是否回到中性区域，取消准备状态
+      // 使用记录的VWAP价格作为中性区域的基准
+      bool back_to_neutral = current_close >= ready_sell_vwap;
+      
+      if (back_to_neutral) {
+         ready_sell = false;
+         ready_sell_vwap = 0.0;
+         Print("回到中性区域，取消准备做空状态");
+         return false;
+      }
+      
+      return can_open;
+   }
+   
+   return false;
 }
 
 //+------------------------------------------------------------------+
@@ -262,7 +339,7 @@ bool SuperStrategy::ShouldSell(void) {
 //+------------------------------------------------------------------+
 void SuperStrategy::OpenBuyPosition(void) {
    double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
-   double sl = ask - atr_value; // 止损
+   double sl = ask - (atr_value * 2.0); // 止损2倍ATR
    
    Order* order = om.Buy(lots, sl, 0.0, "VWAP_Buy");
    if (order != NULL) {
@@ -278,6 +355,12 @@ void SuperStrategy::OpenBuyPosition(void) {
       // 判断是否使用Vegas止盈
       use_vegas_tp = CheckVegasDistance(BUY);
       
+      // 重置准备状态
+      ready_buy = false;
+      ready_sell = false;
+      ready_buy_vwap = 0.0;
+      ready_sell_vwap = 0.0;
+      
       Print("开多仓成功 - 价格:", ask, " 止损:", sl, " ATR:", atr_value, " 使用Vegas:", use_vegas_tp);
    }
 }
@@ -287,8 +370,8 @@ void SuperStrategy::OpenBuyPosition(void) {
 //+------------------------------------------------------------------+
 void SuperStrategy::OpenSellPosition(void) {
    double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
-   double sl = bid + atr_value; // 止损
-   
+   double sl = bid + (atr_value * 2.0); // 止损2倍ATR
+
    Order* order = om.Sell(lots, sl, 0.0, "VWAP_Sell");
    if (order != NULL) {
       sell_order.Add(order);
@@ -303,6 +386,12 @@ void SuperStrategy::OpenSellPosition(void) {
       // 判断是否使用Vegas止盈
       use_vegas_tp = CheckVegasDistance(SELL);
       
+      // 重置准备状态
+      ready_buy = false;
+      ready_sell = false;
+      ready_buy_vwap = 0.0;
+      ready_sell_vwap = 0.0;
+      
       Print("开空仓成功 - 价格:", bid, " 止损:", sl, " ATR:", atr_value, " 使用Vegas:", use_vegas_tp);
    }
 }
@@ -315,14 +404,90 @@ void SuperStrategy::ProcessTakeProfit(void) {
                          SymbolInfoDouble(symbol, SYMBOL_BID) : 
                          SymbolInfoDouble(symbol, SYMBOL_ASK);
    
+   // SuperTrend翻转检测：无论是否触发止盈，SuperTrend翻转都应该立即平仓
+   bool st_reversal_exit = CheckSuperTrendReversal(current_position);
+   if (st_reversal_exit) {
+      // 立即全部平仓
+      if (current_position == BUY && buy_order.Count() > 0) {
+         om.CloseAllBuy();
+      } else if (current_position == SELL && sell_order.Count() > 0) {
+         om.CloseAllSell();
+      }
+      
+      // 重置状态
+      entry_price = 0.0;
+      current_position = DIRECTION_UNKNOWN;
+      remaining_lots = 0.0;
+      first_tp_hit = false;
+      vegas_tp_hit = false;
+      use_vegas_tp = false;
+      
+      Print("SuperTrend翻转信号触发 - 立即全部平仓");
+      return; // 退出函数，不执行后续逻辑
+   }
+
+   // 紧急止损：如果还没有触发第一层止盈，但VWAP反转信号出现，立即止损出场
+   if (!first_tp_hit) {
+      bool emergency_exit = false;
+      
+      if (current_position == BUY) {
+         // 多头紧急止损：检查是否出现强烈的VWAP下穿信号
+         // 连续两根K线都小于VWAP，第4根大于VWAP
+         bool vwap_bearish = iClose(symbol, period, 1) < vwap_handle.data[1] && 
+                            iClose(symbol, period, 2) < vwap_handle.data[2] && 
+                            iClose(symbol, period, 4) >= vwap_handle.data[4];
+         double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
+         double vwap_current = vwap_handle.data[0];
+         bool price_filter = (current_close <= vwap_current - (atr_value * 2.0));
+         emergency_exit = vwap_bearish && price_filter;
+         
+      } else if (current_position == SELL) {
+         // 空头紧急止损：检查是否出现强烈的VWAP上穿信号
+         // 连续两根K线都大于VWAP，第4根小于VWAP
+         bool vwap_bullish = iClose(symbol, period, 1) > vwap_handle.data[1] && 
+                            iClose(symbol, period, 2) > vwap_handle.data[2] && 
+                            iClose(symbol, period, 4) <= vwap_handle.data[4];
+         double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
+         double vwap_current = vwap_handle.data[0];
+         bool price_filter = (current_close >= vwap_current + (atr_value * 2.0));
+         emergency_exit = vwap_bullish && price_filter;
+      }
+      
+      if (emergency_exit) {
+         // 立即全部平仓止损
+         if (current_position == BUY && buy_order.Count() > 0) {
+            Order* order;
+            if (buy_order.TryGetValue(0, order)) {
+               om.CloseByTicket(order.ticket);
+            }
+         } else if (current_position == SELL && sell_order.Count() > 0) {
+            Order* order;
+            if (sell_order.TryGetValue(0, order)) {
+               om.CloseByTicket(order.ticket);
+            }
+         }
+         
+         // 重置状态
+         entry_price = 0.0;
+         current_position = DIRECTION_UNKNOWN;
+         remaining_lots = 0.0;
+         first_tp_hit = false;
+         vegas_tp_hit = false;
+         use_vegas_tp = false;
+         
+         Print("紧急止损触发 - VWAP反转信号，全部平仓止损");
+         return; // 退出函数，不执行后续止盈逻辑
+      }
+   }
+   
    // 第一层止盈（50%）
    if (!first_tp_hit) {
       bool hit_first_tp = false;
       
       if (current_position == BUY) {
-         hit_first_tp = (current_price >= entry_price + atr_value);
+         hit_first_tp = (current_price >= entry_price + (atr_value * 3.0)); // 3倍ATR止盈
       } else if (current_position == SELL) {
-         hit_first_tp = (current_price <= entry_price - atr_value);
+         hit_first_tp = (current_price <= entry_price - (atr_value * 3.0)); // 3倍ATR止盈
       }
       
       if (hit_first_tp) {
@@ -407,10 +572,10 @@ void SuperStrategy::ProcessTakeProfit(void) {
 //| 检查Vegas通道距离是否足够使用Vegas止盈                            |
 //+------------------------------------------------------------------+
 bool SuperStrategy::CheckVegasDistance(DIRECTION direction) {
-   double vegas_upper = vegas_m15_handle.Upper(0);
-   double vegas_lower = vegas_m15_handle.Lower(0);
-   double distance_required = atr_value * 2.0; // 2倍ATR
-   
+   double vegas_upper = vegas_m30_handle.Upper(0);
+   double vegas_lower = vegas_m30_handle.Lower(0);
+   double distance_required = atr_value * 4.0; // 4倍ATR
+
    if (direction == BUY) {
       // 做多：检查开仓价格到Vegas下沿的距离
       return (vegas_lower > entry_price + distance_required);
@@ -430,8 +595,8 @@ bool SuperStrategy::CheckVegasTpCondition(DIRECTION direction) {
                          SymbolInfoDouble(symbol, SYMBOL_BID) : 
                          SymbolInfoDouble(symbol, SYMBOL_ASK);
    
-   double vegas_upper = vegas_m15_handle.Upper(0);
-   double vegas_lower = vegas_m15_handle.Lower(0);
+   double vegas_upper = vegas_m30_handle.Upper(0);
+   double vegas_lower = vegas_m30_handle.Lower(0);
    
    if (direction == BUY) {
       // 做多：价格触及Vegas下沿
@@ -448,9 +613,9 @@ bool SuperStrategy::CheckVegasTpCondition(DIRECTION direction) {
 //| 检查VWAP反转条件                                                 |
 //+------------------------------------------------------------------+  
 bool SuperStrategy::CheckVwapReversal(DIRECTION direction) {
-   double current_close = iClose(symbol, period, 0);
-   double prev_close = iClose(symbol, period, 1);
-   double prev2_close = iClose(symbol, period, 2);
+   double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
+   double prev_close = iClose(symbol, period, 2);
+   double prev2_close = iClose(symbol, period, 3);
    double vwap_current = vwap_handle.data[0];
    double vwap_prev = vwap_handle.data[1];
    double vwap_prev2 = vwap_handle.data[2];
@@ -484,3 +649,42 @@ bool SuperStrategy::CheckVwapReversal(DIRECTION direction) {
    
    return false;
 }
+
+//+------------------------------------------------------------------+
+//| 检查SuperTrend翻转条件                                           |
+//+------------------------------------------------------------------+  
+bool SuperStrategy::CheckSuperTrendReversal(DIRECTION direction) {
+   // 检查是否有足够的数据
+   if (!st_handle || ArraySize(st_handle.trend) < 3) {
+      return false;
+   }
+   
+   // 获取SuperTrend趋势值
+   // trend[1] = 当前K线趋势, trend[2] = 前一根K线趋势
+   int current_trend = st_handle.trend[1];  // 当前趋势
+   int prev_trend = st_handle.trend[2];     // 前一根趋势
+   
+   bool trend_reversed = false;
+   
+   if (direction == BUY) {
+      // 多头仓位：检查SuperTrend是否从上升趋势翻转为下降趋势
+      // 上升趋势 = 1, 下降趋势 = -1
+      trend_reversed = (prev_trend > 0 && current_trend < 0);
+      
+      if (trend_reversed) {
+         Print("SuperTrend翻转检测 - 多头仓位，趋势从上升(", prev_trend, ")翻转为下降(", current_trend, ")");
+      }
+      
+   } else if (direction == SELL) {
+      // 空头仓位：检查SuperTrend是否从下降趋势翻转为上升趋势
+      trend_reversed = (prev_trend < 0 && current_trend > 0);
+      
+      if (trend_reversed) {
+         Print("SuperTrend翻转检测 - 空头仓位，趋势从下降(", prev_trend, ")翻转为上升(", current_trend, ")");
+      }
+   }
+   
+   return trend_reversed;
+}
+
+   
