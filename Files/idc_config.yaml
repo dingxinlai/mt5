@@ -112,7 +112,7 @@ MA:
     Type: BuiltIn
     Name: MA
     Load: Lazy
-    Periods: M15, M30, H1(25, 50, 100)
+    Periods: M15, M30, H1(100, 144, 169)
     M1:
         10:
             MA_PERIOD: 10
@@ -441,29 +441,29 @@ VEGAS:
     Load: Lazy
     Periods: M15, M30, H1
     M1:
-        FAST: MA2.M1.144
-        SLOW: MA2.M1.169
+        FAST: MA.M1.144
+        SLOW: MA.M1.169
     M3:
-        FAST: MA2.M1.144
-        SLOW: MA2.M1.169
+        FAST: MA.M1.144
+        SLOW: MA.M1.169
     M5:
-        FAST: MA2.M5.144
-        SLOW: MA2.M5.169
+        FAST: MA.M5.144
+        SLOW: MA.M5.169
     M15:
-        FAST: MA2.M15.144
-        SLOW: MA2.M15.169
+        FAST: MA.M15.144
+        SLOW: MA.M15.169
     M30:
-        FAST: MA2.M30.144
-        SLOW: MA2.M30.169
+        FAST: MA.M30.144
+        SLOW: MA.M30.169
     H1:
-        FAST: MA2.H1.144
-        SLOW: MA2.H1.169
+        FAST: MA.H1.144
+        SLOW: MA.H1.169
     H2:
-        FAST: MA2.H2.144
-        SLOW: MA2.H2.169
+        FAST: MA.H2.144
+        SLOW: MA.H2.169
     H4:
-        FAST: MA2.H4.144
-        SLOW: MA2.H4.169       
+        FAST: MA.H4.144
+        SLOW: MA.H4.169       
         
 MACD:
     Type: BuiltIn
@@ -947,28 +947,28 @@ ST:
     Type: Custom
     Name: Huolong\\ST
     Load: Lazy
-    Periods: M15, M30, H1, H4
+    Periods: M15, M30, H1
     M1:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
     M3:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
     M5:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
     M15:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
     M30:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
     H1:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
     H4:
         PREFIX: ST
-        MULTIPLIER: 3.0
+        MULTIPLIER: 1.0
         
 HASHI:
     Type: Custom
