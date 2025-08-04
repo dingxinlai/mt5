@@ -162,6 +162,9 @@ SuperStrategy::SuperStrategy(string _symbol, ENUM_TIMEFRAMES _period, int _magic
    // 初始化策略参数
    lots = config.GetDouble(symbol + ".M15.lots", 0.4);
    
+   // 初始化日志限制器，5分钟(300秒)打印一次
+   limiter = new RateLimiter(300);
+   
    Print("SuperStrategy初始化完毕 - Magic:", magic, " Lots:", lots);
 }
 
@@ -235,6 +238,14 @@ void SuperStrategy::Execute(void) {
    if (!vegas_m15_handle.Refresh(buffer_size)) return;
    if (!vegas_m30_handle.Refresh(buffer_size)) return;
    if (!vegas_m60_handle.Refresh(buffer_size)) return;
+
+   // 打印VWAP最近5根价格（5分钟限制一次）
+   if (limiter.CanExecute()) {
+      string vwap_info = StringFormat("VWAP最近5根价格: [0]=%.5f [1]=%.5f [2]=%.5f [3]=%.5f [4]=%.5f", 
+                                     vwap_handle.data[0], vwap_handle.data[1], vwap_handle.data[2], 
+                                     vwap_handle.data[3], vwap_handle.data[4]);
+      Print(vwap_info);
+   }
 
    double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
    double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
@@ -409,9 +420,15 @@ void SuperStrategy::ProcessTakeProfit(void) {
    if (st_reversal_exit) {
       // 立即全部平仓
       if (current_position == BUY && buy_order.Count() > 0) {
-         om.CloseAllBuy();
+         Order* order;
+         if (buy_order.TryGetValue(0, order)) {
+            om.CloseByTicket(order.ticket);
+         }
       } else if (current_position == SELL && sell_order.Count() > 0) {
-         om.CloseAllSell();
+         Order* order;
+         if (sell_order.TryGetValue(0, order)) {
+            om.CloseByTicket(order.ticket);
+         }
       }
       
       // 重置状态
@@ -686,5 +703,3 @@ bool SuperStrategy::CheckSuperTrendReversal(DIRECTION direction) {
    
    return trend_reversed;
 }
-
-   
