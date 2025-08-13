@@ -71,6 +71,11 @@ class SuperStrategy : public Strategy {
       double                        atr_tp_percentage;      // ATR止盈比例参数
       double                        vegas_total_percentage; // Vegas总比例参数
       
+      // ATR倍数参数配置
+      double                        entry_atr_multiplier;   // 开仓条件ATR倍数 (默认2.0)
+      double                        stop_loss_atr_multiplier; // 止损ATR倍数 (默认2.0)
+      double                        take_profit_atr_multiplier; // 止盈ATR倍数 (默认3.0)
+      
       // 反频繁交易过滤
       datetime                      last_close_time;        // 最后平仓时间
       int                           consecutive_losses;     // 连续亏损次数
@@ -102,10 +107,15 @@ class SuperStrategy : public Strategy {
       bool                          CheckVwapReversalCondition(DIRECTION direction);
       bool                          CheckSuperTrendReversalCondition(DIRECTION direction);
       void                          InitializeTakeProfitTriggers(DIRECTION direction);
-      // void                          ExecuteTrigger(ENUM_TP_TRIGGER_TYPE type, const string &comment); // 暂时注释
+      
+      // 平仓辅助方法
+      void                          CloseAllPositions(string comment);
+      void                          ExecutePartialClose(double close_lots, string comment);
    public:
       SuperStrategy(string symbol, ENUM_TIMEFRAMES period, int magic, IndicatorManager* im, 
-                    double atr_tp_percentage = 0.4, double vegas_total_percentage = 0.24);
+                    double atr_tp_percentage = 0.4, double vegas_total_percentage = 0.24,
+                    double entry_atr_multiplier = 2.0, double stop_loss_atr_multiplier = 2.0, 
+                    double take_profit_atr_multiplier = 3.0);
       ~SuperStrategy(void);
       
       void                          Execute(void) override;
@@ -115,9 +125,13 @@ class SuperStrategy : public Strategy {
 //| 构造函数                                                          |
 //+------------------------------------------------------------------+
 SuperStrategy::SuperStrategy(string _symbol, ENUM_TIMEFRAMES _period, int _magic, IndicatorManager* _im,
-                             double _atr_tp_percentage = 0.4, double _vegas_total_percentage = 0.24) 
+                             double _atr_tp_percentage = 0.4, double _vegas_total_percentage = 0.24,
+                             double _entry_atr_multiplier = 2.0, double _stop_loss_atr_multiplier = 2.0, 
+                             double _take_profit_atr_multiplier = 3.0) 
    : symbol(_symbol), magic(_magic), im(_im), period(_period), 
-     atr_tp_percentage(_atr_tp_percentage), vegas_total_percentage(_vegas_total_percentage)
+     atr_tp_percentage(_atr_tp_percentage), vegas_total_percentage(_vegas_total_percentage),
+     entry_atr_multiplier(_entry_atr_multiplier), stop_loss_atr_multiplier(_stop_loss_atr_multiplier),
+     take_profit_atr_multiplier(_take_profit_atr_multiplier)
 {
    cache = new CacheManager();
    Print("缓存管理器初始化完毕");
@@ -171,7 +185,7 @@ SuperStrategy::SuperStrategy(string _symbol, ENUM_TIMEFRAMES _period, int _magic
    vegas_m60_handle = im.GetVegas(PERIOD_H1, buffer_size);
 
    // 初始化策略参数
-   lots = config.GetDouble(symbol + ".M15.lots", 0.4);
+   lots = config.GetDouble(symbol + ".M15.lots", 0.5);
    atr_max = config.GetDouble(symbol + ".M15.atr_max", 12.0);
    atr_min = config.GetDouble(symbol + ".M15.atr_min", 4.0);
    
@@ -307,8 +321,8 @@ bool SuperStrategy::ShouldBuy(void) {
    if (ready_buy) {
       double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
       
-      // 使用记录的VWAP价格作为基准，检查是否满足开仓条件：收盘价 > 记录的VWAP + 2倍ATR
-      bool can_open = current_close > ready_buy_vwap + (CorrectATR(atr_value) * 2.0);
+      // 使用记录的VWAP价格作为基准，检查是否满足开仓条件：收盘价 > 记录的VWAP + entry_atr_multiplier倍ATR
+      bool can_open = current_close > ready_buy_vwap + (CorrectATR(atr_value) * entry_atr_multiplier);
       
       // 检查是否回到中性区域，取消准备状态
       // 使用记录的VWAP价格作为中性区域的基准
@@ -351,8 +365,8 @@ bool SuperStrategy::ShouldSell(void) {
    if (ready_sell) {
       double current_close = iClose(symbol, period, 1); // 使用前一根K线收盘价
       
-      // 使用记录的VWAP价格作为基准，检查是否满足开仓条件：收盘价 < 记录的VWAP - 2倍ATR
-      bool can_open = (current_close < ready_sell_vwap - (CorrectATR(atr_value) * 2.0));
+      // 使用记录的VWAP价格作为基准，检查是否满足开仓条件：收盘价 < 记录的VWAP - entry_atr_multiplier倍ATR
+      bool can_open = (current_close < ready_sell_vwap - (CorrectATR(atr_value) * entry_atr_multiplier));
       
       // 检查是否回到中性区域，取消准备状态
       // 使用记录的VWAP价格作为中性区域的基准
@@ -383,7 +397,7 @@ bool SuperStrategy::ShouldSell(void) {
 //+------------------------------------------------------------------+
 void SuperStrategy::OpenBuyPosition(void) {
    double ask = SymbolInfoDouble(symbol, SYMBOL_ASK);
-   double sl = ask - (CorrectATR(atr_value) * 2.0); // 止损2倍ATR
+   double sl = ask - (CorrectATR(atr_value) * stop_loss_atr_multiplier); // 止损使用参数化ATR倍数
    
    Order* order = om.Buy(lots, sl, 0.0, "VWAP_Buy");
    if (order != NULL) {
@@ -416,7 +430,7 @@ void SuperStrategy::OpenBuyPosition(void) {
 //+------------------------------------------------------------------+
 void SuperStrategy::OpenSellPosition(void) {
    double bid = SymbolInfoDouble(symbol, SYMBOL_BID);
-   double sl = bid + (CorrectATR(atr_value) * 2.0); // 止损2倍ATR
+   double sl = bid + (CorrectATR(atr_value) * stop_loss_atr_multiplier); // 止损使用参数化ATR倍数
 
    Order* order = om.Sell(lots, sl, 0.0, "VWAP_Sell");
    if (order != NULL) {
@@ -448,27 +462,100 @@ void SuperStrategy::OpenSellPosition(void) {
 //| 处理止盈逻辑                                                      |
 //+------------------------------------------------------------------+
 void SuperStrategy::ProcessTakeProfit(void) {
-   // 暂时注释掉所有止盈逻辑
-   /*
    if (tp_manager == NULL) return;
    
    // 检查各种止盈触发条件（无序检查）
    
    // 1. SuperTrend翻转检测（最高优先级，立即平仓100%）
-   if (!tp_manager.IsTriggered(TP_SUPERTREND_REVERSAL) && 
-       CheckSuperTrendReversalCondition(current_position)) {
-      ExecuteTrigger(TP_SUPERTREND_REVERSAL, "SuperTrend翻转");
+   bool supertrend_reversal = CheckSuperTrendReversalCondition(current_position);
+   if (!tp_manager.IsTriggered(TP_SUPERTREND_REVERSAL) && supertrend_reversal) {
+      Print("SuperTrend翻转触发 - 平仓100%");
+      // SuperTrend翻转是100%平仓，直接执行完全平仓
+      CloseAllPositions("SuperTrend_Reversal");
+      return;
    }
-   */
-   Print("ProcessTakeProfit - 暂时禁用");
+   
+   // 2. VWAP反转止盈检测
+   bool vwap_reversal = CheckVwapReversalCondition(current_position);
+   if (!tp_manager.IsTriggered(TP_VWAP_REVERSAL) && vwap_reversal) {
+      Print("VWAP反转止盈触发 - 平仓100%");
+      // VWAP反转也是100%平仓
+      CloseAllPositions("VWAP_Reversal");
+      return;
+   }
+   
+   // 3. 检查其他部分平仓触发器（ATR和Vegas）
+   bool need_partial_close = false;
+   double total_close_lots = 0.0;
+   
+   // ATR 3倍止盈检测
+   bool atr_3x_condition = CheckATR3xCondition(current_position);
+   if (!tp_manager.IsTriggered(TP_ATR_3X) && atr_3x_condition) {
+      tp_manager.SetTriggered(TP_ATR_3X, true);
+      double atr_close_lots = lots * tp_manager.GetTriggerPercentage(TP_ATR_3X);
+      total_close_lots += atr_close_lots;
+      need_partial_close = true;
+      Print("ATR ", DoubleToString(take_profit_atr_multiplier, 1), "倍止盈触发 - 平仓 ", DoubleToString(atr_close_lots, 2), " 手");
+   }
+   
+   // Vegas多周期止盈检测
+   bool vegas_15m_condition = CheckVegas15mCondition(current_position);
+   if (!tp_manager.IsTriggered(TP_VEGAS_15M) && vegas_15m_condition) {
+      tp_manager.SetTriggered(TP_VEGAS_15M, true);
+      double vegas_close_lots = lots * tp_manager.GetTriggerPercentage(TP_VEGAS_15M);
+      total_close_lots += vegas_close_lots;
+      need_partial_close = true;
+      Print("Vegas 15分钟止盈触发 - 平仓 ", DoubleToString(vegas_close_lots, 2), " 手");
+   }
+   
+   bool vegas_30m_condition = CheckVegas30mCondition(current_position);
+   if (!tp_manager.IsTriggered(TP_VEGAS_30M) && vegas_30m_condition) {
+      tp_manager.SetTriggered(TP_VEGAS_30M, true);
+      double vegas_close_lots = lots * tp_manager.GetTriggerPercentage(TP_VEGAS_30M);
+      total_close_lots += vegas_close_lots;
+      need_partial_close = true;
+      Print("Vegas 30分钟止盈触发 - 平仓 ", DoubleToString(vegas_close_lots, 2), " 手");
+   }
+   
+   bool vegas_1h_condition = CheckVegas1hCondition(current_position);
+   if (!tp_manager.IsTriggered(TP_VEGAS_1H) && vegas_1h_condition) {
+      tp_manager.SetTriggered(TP_VEGAS_1H, true);
+      double vegas_close_lots = lots * tp_manager.GetTriggerPercentage(TP_VEGAS_1H);
+      total_close_lots += vegas_close_lots;
+      need_partial_close = true;
+      Print("Vegas 1小时止盈触发 - 平仓 ", DoubleToString(vegas_close_lots, 2), " 手");
+   }
+   
+   // 如果有新的触发器，执行一次部分平仓
+   if (need_partial_close && total_close_lots > 0) {
+      // 确保不超过原始手数
+      total_close_lots = MathMin(total_close_lots, lots);
+      ExecutePartialClose(total_close_lots, "TakeProfit_Triggered");
+      
+      // 检查是否已经全部平仓
+      double remaining_lots = tp_manager.GetRemainingLots();
+      if (remaining_lots <= 0.01) {
+         CloseAllPositions("TakeProfit_Complete");
+      }
+   }
 }
 
 //+------------------------------------------------------------------+
 //| 初始化止盈触发器                                                  |
 //+------------------------------------------------------------------+
 void SuperStrategy::InitializeTakeProfitTriggers(DIRECTION direction) {
-   // 暂时注释掉所有止盈触发器初始化逻辑
-   Print("InitializeTakeProfitTriggers - 暂时禁用，方向:", direction);
+   if (tp_manager == NULL) return;
+   
+   Print("初始化止盈触发器，方向:", EnumToString(direction));
+   
+   // 重置所有触发器状态
+   tp_manager.Reset();
+   
+   // 根据当前市场条件动态调整Vegas触发器
+   tp_manager.AdjustVegasPercentages();
+   
+   // 打印当前止盈配置
+   tp_manager.PrintStatus();
 }
 
 //+------------------------------------------------------------------+
@@ -482,7 +569,7 @@ void SuperStrategy::ExecuteTrigger(ENUM_TP_TRIGGER_TYPE type, const string &comm
 */
 
 //+------------------------------------------------------------------+
-//| 检查ATR 3倍止盈条件                                              |
+//| 检查ATR倍数止盈条件                                              |
 //+------------------------------------------------------------------+
 bool SuperStrategy::CheckATR3xCondition(DIRECTION direction) {
    double current_price = (direction == BUY) ? 
@@ -490,9 +577,9 @@ bool SuperStrategy::CheckATR3xCondition(DIRECTION direction) {
                          SymbolInfoDouble(symbol, SYMBOL_ASK);
    
    if (direction == BUY) {
-      return (current_price >= entry_price + (atr_value * 3.0));
+      return (current_price >= entry_price + (atr_value * take_profit_atr_multiplier));
    } else if (direction == SELL) {
-      return (current_price <= entry_price - (atr_value * 3.0));
+      return (current_price <= entry_price - (atr_value * take_profit_atr_multiplier));
    }
    
    return false;
@@ -632,4 +719,82 @@ bool SuperStrategy::CheckSuperTrendReversalCondition(DIRECTION direction) {
    }
    
    return trend_reversed;
+}
+
+//+------------------------------------------------------------------+
+//| 平仓所有持仓                                                      |
+//+------------------------------------------------------------------+
+void SuperStrategy::CloseAllPositions(string comment) {
+   // 使用OrderManager的批量平仓方法
+   bool buy_closed = om.CloseAllBuy(comment);
+   bool sell_closed = om.CloseAllSell(comment);
+   
+   // 清理订单列表
+   for (int i = buy_order.Count() - 1; i >= 0; i--) {
+      Order* order;
+      if (buy_order.TryGetValue(i, order) && order != NULL) {
+         delete order;
+         buy_order.RemoveAt(i);
+      }
+   }
+   
+   for (int i = sell_order.Count() - 1; i >= 0; i--) {
+      Order* order;
+      if (sell_order.TryGetValue(i, order) && order != NULL) {
+         delete order;
+         sell_order.RemoveAt(i);
+      }
+   }
+   
+   // 重置持仓状态
+   has_position = false;
+   current_position = DIRECTION_UNKNOWN;
+   entry_price = 0.0;
+   
+   // 重置止盈管理器
+   if (tp_manager != NULL) {
+      tp_manager.Reset();
+   }
+   
+   Print("所有持仓已平仓: ", comment, " (买单:", buy_closed, " 卖单:", sell_closed, ")");
+}
+
+//+------------------------------------------------------------------+
+//| 执行部分平仓                                                      |
+//+------------------------------------------------------------------+
+void SuperStrategy::ExecutePartialClose(double close_lots, string comment) {
+   if (close_lots <= 0.0) return;
+   
+   // 优化的部分平仓逻辑：
+   // 1. 策略确保买单和卖单不会同时存在
+   // 2. 每个方向最多只有一个订单
+   // 3. 直接使用close_lots，无需循环计算总手数
+   
+   Order* order = NULL;
+   
+   // 处理买单
+   if (buy_order.Count() > 0 && buy_order.TryGetValue(0, order) && order != NULL) {
+      om.CloseBuy(order.ticket, close_lots);
+      
+      // 如果平仓手数大于等于订单手数，清理订单
+      if (close_lots >= lots) {
+         delete order;
+         buy_order.RemoveAt(0);
+      }
+      Print("买单部分平仓: ", DoubleToString(close_lots, 2), " 手 - ", comment);
+      return;
+   }
+   
+   // 处理卖单
+   if (sell_order.Count() > 0 && sell_order.TryGetValue(0, order) && order != NULL) {
+      om.CloseSell(order.ticket, close_lots);
+      
+      // 如果平仓手数大于等于订单手数，清理订单
+      if (close_lots >= lots) {
+         delete order;
+         sell_order.RemoveAt(0);
+      }
+      Print("卖单部分平仓: ", DoubleToString(close_lots, 2), " 手 - ", comment);
+      return;
+   }
 }
